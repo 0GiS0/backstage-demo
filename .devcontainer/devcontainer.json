@@ -1,0 +1,44 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+	"name": "Spotify Backstage Dev Container",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	// "image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"nodeGypDependencies": true,
+			"version": "18",
+			"nvmVersion": "latest"
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	},
+	"forwardPorts": [
+		3000,
+		7007
+	],
+	"containerEnv": {
+		"POSTGRES_HOST": "db",
+		"POSTGRES_PORT": "5432",
+		"POSTGRES_USER": "postgres",
+		"POSTGRES_PASSWORD": "example"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-ossdata.vscode-postgresql",
+				"redhat.vscode-yaml"
+			]
+		}
+	}
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Configure tool-specific properties.
+	// "customizations": {},
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

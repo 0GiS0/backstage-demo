@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  
+  app:
+    image: mcr.microsoft.com/devcontainers/base:bullseye
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    networks:
+    - backstage
+  db:    
+    image:  postgres
+    environment:
+      POSTGRES_PASSWORD: example
+    networks:
+      - backstage
+    ports:
+      - 5432:5432
+      
+networks:
+  backstage:
