@@ -40,4 +40,7 @@ backend.add(import('@backstage/plugin-search-backend/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 
+// github integration
+backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
+
 backend.start();
