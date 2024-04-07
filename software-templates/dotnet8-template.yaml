@@ -45,7 +45,8 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-    # here's the steps that are executed in series in the scaffolder backend
+  # here's the steps that are executed in series in the scaffolder backend
+  # You can see all actions you have registered here: http://localhost:3000/create/actions
   steps:
     - id: fetch-base
       name: Fetch Base
@@ -57,7 +58,7 @@ spec:
           owner: ${{ parameters.owner }}
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          repoUrl: ${{ parameters.repoUrl }}
+          repoUrl: ${{ parameters.repoUrl }}          
     - id: fetch-docs
       name: Fetch Docs
       action: fetch:plain
@@ -71,7 +72,11 @@ spec:
         allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
-    
+        repoVisibility: private
+        gitCommitMessage: Create scaffold
+        topics: ['backstage','returngis']
+        secrets: {}
+        variables: {}
     - id: register
       name: Register
       action: catalog:register

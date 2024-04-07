@@ -109,7 +109,7 @@ catalog:
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
     #   rules:
     #     - allow: [User, Group]
-    - type: url
-      target: https://github.com/0GiS0/backstage-demo/blob/main/software-templates/dotnet8-template.yaml
-      rules:
-        - allow: [Template]
+    # - type: url
+    #   target: https://github.com/0GiS0/backstage-demo/blob/main/software-templates/dotnet8-template.yaml
+    #   rules:
+    #     - allow: [Template]
