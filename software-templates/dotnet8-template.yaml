@@ -77,6 +77,13 @@ spec:
         topics: ['backstage','returngis']
         secrets: {}
         variables: {}
+    - id: github-action
+      name: Stating GitHub action       
+      action: github:actions:dispatch
+      input:
+        workflowId: ci.yml # ID of GitHub action WorkFlow
+        repoUrl: ${{ parameters.repoUrl }}     
+        branchOrTagName: 'main'
     - id: register
       name: Register
       action: catalog:register
