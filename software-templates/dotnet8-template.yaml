@@ -1,0 +1,81 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+# some metadata about the template itself
+metadata:
+  name: dotnet8-template
+  title: Dotnet 8 Template
+  description: Scaffold a new .NET 8 project
+spec:
+  owner: backstage/techdocs-core
+  type: service
+
+# these are the steps which are rendered in the frontend with the form input
+parameters:
+  - title: Complete the form to create a new .NET 8 project
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        title: Project Name
+        description: The name of the project
+        ui:autofocus: true
+      owner:
+        title: Owner
+        type: string
+        description: The owner of the project
+        ui:field: OwnerPicker
+        ui:options:
+          catalogFilter:
+            kind: Group
+  - title: Choose a destination
+    required:
+      - repoUrl
+    properties:
+      repoUrl:
+        title: Repository URL
+        type: string        
+        description: The URL of the repository
+        ui:field: RepoUrlPicker
+        ui:options:
+          allowedHosts:
+            - github.com
+  # here's the steps that are executed in series in the scaffolder backend
+steps:
+  - id: fetch-base
+    name: Fetch Base
+    action: fetch:template
+    input:
+      url: https://github.com/0GiS0/dotnet8-backstage-template
+      values:
+        name: ${{ parameters.name }}
+        owner: ${{ parameters.owner }}
+  - id: fetch-docs
+    name: Fetch Docs
+    action: fetch:plain
+    input:
+      targetPath: ./docs
+      url: https://github.com/0GiS0/dotnet8-backstage-template
+  - id: publish
+    name: Publish
+    action: publish:github
+    input:
+      allowedHosts: ['github.com']
+      description: This is ${{ parameters.name }}
+      repoUrl: ${{ parameters.repoUrl }}
+  
+  - id: register
+    name: Register
+    action: catalog:register
+    input:
+      repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+      catalogInfoPath: '/catalog-info.yaml'
+
+# some outputs which are saved along with the job for use in the frontend
+output:
+  links:
+     - title: Repository
+       url: ${{ steps['publish'].output.remoteUrl }}
+     - title: Open in catalog
+       icon: catalog
+       entityRef: ${{ steps['register'].output.entityRef }}
