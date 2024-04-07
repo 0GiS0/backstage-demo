@@ -50,6 +50,7 @@ steps:
       values:
         name: ${{ parameters.name }}
         owner: ${{ parameters.owner }}
+        repoUrl: ${{ parameters.repoUrl }}
   - id: fetch-docs
     name: Fetch Docs
     action: fetch:plain
