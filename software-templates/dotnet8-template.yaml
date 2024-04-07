@@ -6,7 +6,7 @@ metadata:
   title: Dotnet 8 Template
   description: Scaffold a new .NET 8 project
 spec:
-  owner: backstage/techdocs-core
+  owner: user:0GiS0
   type: service
 
 # these are the steps which are rendered in the frontend with the form input
@@ -27,7 +27,7 @@ spec:
           ui:field: OwnerPicker
           ui:options:
             catalogFilter:
-              kind: Group
+              kind: User
     - title: Choose a destination
       required:
         - repoUrl
