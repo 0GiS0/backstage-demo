@@ -75,6 +75,7 @@ spec:
         repoVisibility: private
         gitCommitMessage: Create scaffold
         topics: ['backstage','returngis']
+        defaultBranch: main
         secrets: {}
         variables: {}
     - id: github-action
