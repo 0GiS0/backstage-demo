@@ -78,37 +78,49 @@ scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
+  orphanStrategy: delete
   providers:
     github:
-      returngisOrg:
+      returngisOrg:        
         organization: returngis
         catalogPath: '/catalog-info.yaml'
         filters:
           branch: main
         schedule:
-          frequency: { minutes: 5 }     
-          timeout: { minutes: 3 }     
+          frequency: { minutes: 60 }
+          timeout: { minutes: 3 }          
+      personalAccount:
+        organization: 0GiS0
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: main
+          allowForks: false
+          topic:
+            include:
+              - "backstage-include"            
+        schedule:
+          frequency: { minutes: 60 }     
+          timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location, Template]
+    - allow: [System, Domain, Component, API, Resource, Location, Template]
   locations:
-  #   # Local example data, file locations are relative to the backend process, typically `packages/backend`
-  #   - type: file
-  #     target: ../../examples/entities.yaml
-
-  #   # Local example template
-  #   - type: file
-  #     target: ../../examples/template/template.yaml
-  #     rules:
-  #       - allow: [Template]
-
     # Local example organizational data
     - type: file
       target: ../../examples/org.yaml
       rules:
         - allow: [User, Group]
+    #   # Local example data, file locations are relative to the backend process, typically `packages/backend`
+    #   - type: file
+    #     target: ../../examples/entities.yaml
+
+    #   # Local example template
+    #   - type: file
+    #     target: ../../examples/template/template.yaml
+    #     rules:
+    #       - allow: [Template]
 
     ## Uncomment these lines to add more example data
     # - type: url
