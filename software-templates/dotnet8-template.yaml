@@ -74,9 +74,11 @@ spec:
         repoUrl: ${{ parameters.repoUrl }}
         repoVisibility: private
         gitCommitMessage: Create scaffold
-        topics: ['backstage','returngis']
+        topics: ['backstage-include','returngis']
         defaultBranch: main
-        secrets: {}
+        secrets: {
+          MY_SECRET: This is a secret
+        }
         variables: {}
     - id: github-action
       name: Stating GitHub action       

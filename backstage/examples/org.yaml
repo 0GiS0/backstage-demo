@@ -22,6 +22,9 @@ metadata:
   name: marvel
 spec:
   type: team
+  profile:
+    email: marvel@returngis.net
+    picture: https://cdn-icons-png.flaticon.com/128/11892/11892380.png
   children: []
 
 ---
@@ -32,4 +35,7 @@ metadata:
   name: dc
 spec:
   type: team
+  profile:
+    email: dc@returngis.net
+    picture: https://cdn-icons-png.flaticon.com/128/805/805385.png
   children: []
