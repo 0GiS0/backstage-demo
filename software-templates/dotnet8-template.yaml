@@ -64,8 +64,8 @@ spec:
       name: Create a file
       action: acme:file:create
       input:
-        path: ./docs/README.md
-        content: |
+        filename: prueba.md
+        contents: |
           # ${{ parameters.name }}
           ${{ parameters.description }}     
     - id: fetch-docs
