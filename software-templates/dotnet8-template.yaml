@@ -10,6 +10,7 @@ spec:
   type: service
 
 # these are the steps which are rendered in the frontend with the form input
+# https://backstage.io/docs/features/software-templates/input-examples
   parameters:
     - title: Complete the form to create a new .NET 8 project
       required:
@@ -58,7 +59,15 @@ spec:
           owner: ${{ parameters.owner }}
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          repoUrl: ${{ parameters.repoUrl }}          
+          repoUrl: ${{ parameters.repoUrl }}
+    - id: acme:file:create
+      name: Create a file
+      action: acme:file:create
+      input:
+        path: ./docs/README.md
+        content: |
+          # ${{ parameters.name }}
+          ${{ parameters.description }}     
     - id: fetch-docs
       name: Fetch Docs
       action: fetch:plain

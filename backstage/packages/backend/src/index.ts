@@ -8,6 +8,10 @@
 
 import { createBackend } from '@backstage/backend-defaults';
 
+import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
+import { createBackendModule } from '@backstage/backend-plugin-api';
+import{createNewFileAction} from './plugins/scaffolder/actions/enable_ghas';
+
 const backend = createBackend();
 
 backend.add(import('@backstage/plugin-app-backend/alpha'));
@@ -45,5 +49,27 @@ backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 
 // github discovery
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
+
+// Register custom actions
+const scaffolderModuleCustomExtensions = createBackendModule({
+  pluginId: 'scaffolder', // name of the plugin that the module is targeting
+  moduleId: 'custom-extensions',
+  register(env) {
+    env.registerInit({
+      deps: {
+        scaffolder: scaffolderActionsExtensionPoint,
+        // ... and other dependencies as needed
+      },
+      async init({ scaffolder /* ..., other dependencies */ }) {
+        // Here you have the opportunity to interact with the extension
+        // point before the plugin itself gets instantiated
+        scaffolder.addActions(createNewFileAction()); // just an example
+      },
+    });
+  },
+});
+
+
+backend.add(scaffolderModuleCustomExtensions());
 
 backend.start();
