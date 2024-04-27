@@ -8,9 +8,16 @@
 
 import { createBackend } from '@backstage/backend-defaults';
 
+import {
+  DefaultGithubCredentialsProvider,
+  ScmIntegrations,
+} from '@backstage/integration';
+
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
-import { createBackendModule } from '@backstage/backend-plugin-api';
-import{createNewFileAction} from './plugins/scaffolder/actions/enable_ghas';
+import { coreServices, createBackendModule } from '@backstage/backend-plugin-api';
+import { createNewFileAction } from './plugins/scaffolder/actions/create_file';
+import { enableGHAS } from './plugins/scaffolder/actions/enable_ghas';
+
 
 const backend = createBackend();
 
@@ -58,12 +65,18 @@ const scaffolderModuleCustomExtensions = createBackendModule({
     env.registerInit({
       deps: {
         scaffolder: scaffolderActionsExtensionPoint,
+        config: coreServices.rootConfig
         // ... and other dependencies as needed
       },
-      async init({ scaffolder /* ..., other dependencies */ }) {
+      async init({ scaffolder, config /* ..., other dependencies */ }) {
         // Here you have the opportunity to interact with the extension
         // point before the plugin itself gets instantiated
-        scaffolder.addActions(createNewFileAction()); // just an example
+
+        const integrations = ScmIntegrations.fromConfig(config);
+        const githubCredentialsProvider = DefaultGithubCredentialsProvider.fromIntegrations(integrations);
+
+        scaffolder.addActions(createNewFileAction()); // Create a new file
+        scaffolder.addActions(enableGHAS({ integrations: integrations, githubCredentialsProvider: githubCredentialsProvider })); // Enable GitHub Advanced Security
       },
     });
   },

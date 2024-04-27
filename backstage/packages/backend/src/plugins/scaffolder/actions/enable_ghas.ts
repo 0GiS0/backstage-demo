@@ -1,40 +1,170 @@
-import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
-import { writeFile } from 'fs';
+import { createTemplateAction, parseRepoUrl } from '@backstage/plugin-scaffolder-node';
 import { InputError } from '@backstage/errors';
+import { Octokit } from "octokit";
+import {
+    DefaultGithubCredentialsProvider,
+    GithubCredentialsProvider,
+    ScmIntegrationRegistry,
+} from '@backstage/integration';
 
-export function createNewFileAction() {
-    return createTemplateAction<{ contents: string; filename: string }>({
-        id: 'acme:file:create',
+async function getOctokitOptions(options: {
+    integrations: ScmIntegrationRegistry;
+    credentialsProvider?: GithubCredentialsProvider;
+    token?: string;
+    repoUrl: string;
+}) {
+    const { integrations, credentialsProvider, token, repoUrl } = options;
+
+    const { owner, repo, host } = parseRepoUrl(repoUrl, integrations);
+
+    const integrationConfig = integrations.github.byHost(host)?.config;
+
+    if (!integrationConfig) {
+        throw new InputError(
+            `No GitHub integration found for repository URL: ${repoUrl}`,
+        );
+    }
+
+    if (token) {
+        return {
+            auth: token
+        }
+    }
+
+    const githubCredentialsProvider = credentialsProvider ?? DefaultGithubCredentialsProvider.fromIntegrations(integrations);
+
+    const { token: credentialProviderToken } =
+        await githubCredentialsProvider.getCredentials({
+            url: `https://${host}/${encodeURIComponent(owner)}/${encodeURIComponent(
+                repo,
+            )}`,
+        });
+
+    if (!credentialProviderToken) {
+        throw new InputError(
+            `No token available for host: ${host}, with owner ${owner}, and repo ${repo}`,
+        );
+    }
+
+    return {
+        auth: credentialProviderToken,       
+    };
+}
+
+
+export function enableGHAS(options: {
+    integrations: ScmIntegrationRegistry;
+    githubCredentialsProvider?: GithubCredentialsProvider;
+}) {
+
+    const { integrations, githubCredentialsProvider } = options;
+
+    return createTemplateAction<{
+        repoUrl: string,
+        code_scanning: string,
+        secret_scanning: string,
+        push_secret_protection: string,
+        dependabot: string,
+        token?: string
+
+    }>({
+        id: 'github:ghas:configure',
         schema: {
             input: {
-                required: ['contents', 'filename'],
+                required: ['repoUrl', 'code_scanning', 'secret_scanning', 'push_secret_protection', 'dependabot'],
                 type: 'object',
                 properties: {
-                    contents: {
+                    repoUrl: {
                         type: 'string',
-                        title: 'Contents',
-                        description: 'The contents of the file',
+                        title: 'Repo URL',
+                        description: 'The URL of the repository to enable GHAS for',
                     },
-                    filename: {
+                    code_scanning: {
                         type: 'string',
-                        title: 'Filename',
-                        description: 'The filename of the file that will be created',
+                        title: 'Code Scanning',
+                        description: 'Enable GitHub Advanced Security for this repository',
+                    },
+                    secret_scanning: {
+                        type: 'string',
+                        title: 'Secret Scanning',
+                        description: 'Enable GitHub Advanced Security for this repository',
+                    },
+                    push_secret_protection: {
+                        type: 'string',
+                        title: 'Push Secret Protection',
+                        description: 'Enable GitHub Advanced Security for this repository',
+                    },
+                    dependabot: {
+                        type: 'string',
+                        title: 'Dependabot',
+                        description: 'Enable GitHub Advanced Security for this repository',
                     },
                 },
             },
         },
         async handler(ctx) {
-            const { signal } = ctx;
+
+            const {
+                repoUrl,
+                code_scanning,
+                secret_scanning,
+                push_secret_protection,
+                dependabot,
+                token: providedToken
+            } = ctx.input;
 
             try {
-                await writeFile(
-                    `${ctx.workspacePath}/${ctx.input.filename}`,
-                    ctx.input.contents,
-                    { signal },
-                    _ => { },
-                );
+
+                ctx.logger.info(`Enabling GHAS for ${repoUrl}`);
+                ctx.logger.info(`Code Scanning: ${code_scanning}`);
+                ctx.logger.info(`Secret Scanning: ${secret_scanning}`);
+                ctx.logger.info(`Push Secret Protection: ${push_secret_protection}`);
+                ctx.logger.info(`Dependabot: ${dependabot}`);
+
+                // Get owner and repo from repoUrl. Example: github.com?owner=0gis0&repo=me-acompanara
+                // const url = new URL(ctx.input.repoUrl);
+                // const owner = url.searchParams.get('owner');
+                // const repo = url.searchParams.get('repo');
+
+                const { owner, repo } = parseRepoUrl(repoUrl, integrations);
+
+                if (!owner || !repo) {
+                    throw new InputError('Invalid repo URL');
+                }
+
+                const octoKitOptions = await getOctokitOptions({
+                    integrations,
+                    credentialsProvider: githubCredentialsProvider,
+                    token: providedToken,
+                    repoUrl: repoUrl
+                });
+
+                ctx.logger.info(`Trying to get token from ${octoKitOptions.auth}`);
+
+                const octokit = new Octokit(octoKitOptions);
+
+                ctx.logger.info(`Got token from ${octoKitOptions.auth}`);
+
+                await octokit.request('PATCH /repos/{owner}/{repo}', {
+                    owner: owner,
+                    repo: repo,
+                    'private': false,
+                    security_and_analysis: {
+                        secret_scanning: {
+                            status: ctx.input.secret_scanning
+                        },
+                        secret_scanning_push_protection: {
+                            status: ctx.input.push_secret_protection
+                        }
+                    },
+                    headers: {
+                        'X-GitHub-Api-Version': '2022-11-28'
+                    }
+                });
+
+
             } catch (error) {
-                throw new InputError('Failed to create file', error);
+                throw new InputError('Failed to enable GHAS', error);
             }
         },
     });
