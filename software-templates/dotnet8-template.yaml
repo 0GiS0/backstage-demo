@@ -95,8 +95,7 @@ spec:
       name: Configure GitHub Advanced Security
       action: github:ghas:configure
       input:
-        repo: me-acompanara
-        owner: 0GiS0
+        repoUrl: ${{ parameters.repoUrl }}
         code_scanning: enabled
         secret_scanning: enabled
         push_secret_protection: enabled
