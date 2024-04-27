@@ -67,17 +67,7 @@ spec:
         filename: prueba.md
         contents: |
           # ${{ parameters.name }}
-          ${{ parameters.description }}
-    - id: github:ghas:configure
-      name: Configure GitHub Advanced Security
-      action: github:ghas:configure
-      input:
-        repo: ${{ parameters.name }}
-        owner: 0GiS0
-        code_scanning: enabled
-        secret_scanning: enabled
-        push_secret_protection: enabled
-        dependabot: enabled        
+          ${{ parameters.description }}    
     - id: fetch-docs
       name: Fetch Docs
       action: fetch:plain
@@ -101,6 +91,16 @@ spec:
         variables: {
           MY_VARIABLE: This is a variable
         }
+    - id: github:ghas:configure
+      name: Configure GitHub Advanced Security
+      action: github:ghas:configure
+      input:
+        repo: ${{ parameters.name }}
+        owner: 0GiS0
+        code_scanning: enabled
+        secret_scanning: enabled
+        push_secret_protection: enabled
+        dependabot: enabled
     - id: github-action
       name: Stating GitHub action       
       action: github:actions:dispatch
