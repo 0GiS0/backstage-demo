@@ -12,7 +12,7 @@ import { createBackend } from '@backstage/backend-defaults';
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
 import { DefaultGithubCredentialsProvider, ScmIntegrations } from '@backstage/integration';
 import { coreServices, createBackendModule } from '@backstage/backend-plugin-api';
-import { createNewFileAction } from './plugins/scaffolder/actions/common/create_file';
+import { createNewFileAction } from './plugins/scaffolder/actions/common/createFile';
 import { githubEnableGHAS } from './plugins/scaffolder/actions/github/githubEnableGHAS';
 
 
