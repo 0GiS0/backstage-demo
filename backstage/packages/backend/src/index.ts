@@ -8,15 +8,12 @@
 
 import { createBackend } from '@backstage/backend-defaults';
 
-import {
-  DefaultGithubCredentialsProvider,
-  ScmIntegrations,
-} from '@backstage/integration';
 
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
+import { DefaultGithubCredentialsProvider, ScmIntegrations } from '@backstage/integration';
 import { coreServices, createBackendModule } from '@backstage/backend-plugin-api';
-import { createNewFileAction } from './plugins/scaffolder/actions/create_file';
-import { enableGHAS } from './plugins/scaffolder/actions/enable_ghas';
+import { createNewFileAction } from './plugins/scaffolder/actions/common/create_file';
+import { githubEnableGHAS } from './plugins/scaffolder/actions/github/githubEnableGHAS';
 
 
 const backend = createBackend();
@@ -75,8 +72,10 @@ const scaffolderModuleCustomExtensions = createBackendModule({
         const integrations = ScmIntegrations.fromConfig(config);
         const githubCredentialsProvider = DefaultGithubCredentialsProvider.fromIntegrations(integrations);
 
-        scaffolder.addActions(createNewFileAction()); // Create a new file
-        scaffolder.addActions(enableGHAS({ integrations: integrations, githubCredentialsProvider: githubCredentialsProvider })); // Enable GitHub Advanced Security
+        // Create a new file
+        scaffolder.addActions(createNewFileAction()); 
+        // Enable GitHub Advanced Security
+        scaffolder.addActions(githubEnableGHAS({ integrations: integrations, githubCredentialsProvider: githubCredentialsProvider })); 
       },
     });
   },

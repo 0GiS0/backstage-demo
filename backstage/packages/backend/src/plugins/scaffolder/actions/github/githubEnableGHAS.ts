@@ -1,11 +1,7 @@
 import { createTemplateAction, parseRepoUrl } from '@backstage/plugin-scaffolder-node';
 import { InputError } from '@backstage/errors';
+import { DefaultGithubCredentialsProvider, GithubCredentialsProvider, ScmIntegrationRegistry } from '@backstage/integration';
 import { Octokit } from "octokit";
-import {
-    DefaultGithubCredentialsProvider,
-    GithubCredentialsProvider,
-    ScmIntegrationRegistry,
-} from '@backstage/integration';
 
 async function getOctokitOptions(options: {
     integrations: ScmIntegrationRegistry;
@@ -33,12 +29,7 @@ async function getOctokitOptions(options: {
 
     const githubCredentialsProvider = credentialsProvider ?? DefaultGithubCredentialsProvider.fromIntegrations(integrations);
 
-    const { token: credentialProviderToken } =
-        await githubCredentialsProvider.getCredentials({
-            url: `https://${host}/${encodeURIComponent(owner)}/${encodeURIComponent(
-                repo,
-            )}`,
-        });
+    const { token: credentialProviderToken } = await githubCredentialsProvider.getCredentials({ url: `https://${host}/${encodeURIComponent(owner)}/${encodeURIComponent(repo,)}`, });
 
     if (!credentialProviderToken) {
         throw new InputError(
@@ -47,12 +38,12 @@ async function getOctokitOptions(options: {
     }
 
     return {
-        auth: credentialProviderToken,       
+        auth: credentialProviderToken,
     };
 }
 
 
-export function enableGHAS(options: {
+export function githubEnableGHAS(options: {
     integrations: ScmIntegrationRegistry;
     githubCredentialsProvider?: GithubCredentialsProvider;
 }) {
@@ -119,12 +110,7 @@ export function enableGHAS(options: {
                 ctx.logger.info(`Code Scanning: ${code_scanning}`);
                 ctx.logger.info(`Secret Scanning: ${secret_scanning}`);
                 ctx.logger.info(`Push Secret Protection: ${push_secret_protection}`);
-                ctx.logger.info(`Dependabot: ${dependabot}`);
-
-                // Get owner and repo from repoUrl. Example: github.com?owner=0gis0&repo=me-acompanara
-                // const url = new URL(ctx.input.repoUrl);
-                // const owner = url.searchParams.get('owner');
-                // const repo = url.searchParams.get('repo');
+                ctx.logger.info(`Dependabot: ${dependabot}`);                
 
                 const { owner, repo } = parseRepoUrl(repoUrl, integrations);
 
@@ -139,16 +125,14 @@ export function enableGHAS(options: {
                     repoUrl: repoUrl
                 });
 
-                ctx.logger.info(`Trying to get token from ${octoKitOptions.auth}`);
+                // ctx.logger.info(`Got token from ${octoKitOptions.auth}`);
 
-                const octokit = new Octokit(octoKitOptions);
-
-                ctx.logger.info(`Got token from ${octoKitOptions.auth}`);
+                const octokit = new Octokit(octoKitOptions);                
 
                 await octokit.request('PATCH /repos/{owner}/{repo}', {
                     owner: owner,
                     repo: repo,
-                    'private': false,
+                    'private': false, // I change this to test GHAS configuration
                     security_and_analysis: {
                         secret_scanning: {
                             status: ctx.input.secret_scanning
