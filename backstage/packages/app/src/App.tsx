@@ -10,7 +10,8 @@ import {
   CatalogImportPage,
   catalogImportPlugin,
 } from '@backstage/plugin-catalog-import';
-import { ScaffolderFieldExtensions, ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
+import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
+import { ScaffolderLayouts, ScaffolderFieldExtensions } from '@backstage/plugin-scaffolder-react';
 import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
@@ -43,6 +44,7 @@ import {
 } from '@backstage/core-components';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { ValidateKebabCaseFieldExtension } from './scaffolder/extensions';
+import { TwoColumnLayout } from './scaffolder/custom-layouts/TwoColum';
 
 const githubProvider: SignInProviderConfig = {
   id: 'github-auth-provider',
@@ -109,6 +111,9 @@ const routes = (
       <ScaffolderFieldExtensions>
         <ValidateKebabCaseFieldExtension />
       </ScaffolderFieldExtensions>
+      <ScaffolderLayouts>
+        <TwoColumnLayout />
+      </ScaffolderLayouts>
     </Route>
 
     <Route path="/api-docs" element={<ApiExplorerPage />} />
