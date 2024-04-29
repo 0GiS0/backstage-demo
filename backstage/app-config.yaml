@@ -82,7 +82,7 @@ scaffolder:
   defaultCommitMessage: 'chore: scaffolded files from template'
 
 catalog:
-  orphanStrategy: delete
+  orphanStrategy: delete  
   providers:
     github:
       returngisOrg:        
