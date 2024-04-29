@@ -75,7 +75,11 @@ auth:
     guest: {}
 
 scaffolder:
-  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options  
+  defaultAuthor:
+    email: 'backstage@returngis.net'
+    name: 'Backstage Team'
+  defaultCommitMessage: 'chore: scaffolded files from template'
 
 catalog:
   orphanStrategy: delete
