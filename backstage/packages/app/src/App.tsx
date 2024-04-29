@@ -43,7 +43,7 @@ import {
   SignInProviderConfig
 } from '@backstage/core-components';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
-import { ValidateKebabCaseFieldExtension } from './scaffolder/extensions';
+import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
 import { TwoColumnLayout } from './scaffolder/custom-layouts/TwoColum';
 
 const githubProvider: SignInProviderConfig = {
