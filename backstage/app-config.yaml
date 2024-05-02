@@ -18,7 +18,7 @@ backend:
     # Uncomment the following host directive to bind to specific interfaces
     # host: 127.0.0.1
   csp:
-    connect-src: ["'self'", 'http:', 'https:']
+    connect-src: ["'self'", "http:", "https:"]
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
@@ -62,11 +62,11 @@ proxy:
 # and an external cloud storage when deploying TechDocs for production use-case.
 # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
-  builder: 'local' # Alternatives - 'external'
+  builder: "local" # Alternatives - 'external'
   generator:
-    runIn: 'docker' # Alternatives - 'local'
+    runIn: "docker" # Alternatives - 'local'
   publisher:
-    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    type: "local" # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
@@ -75,67 +75,109 @@ auth:
     guest: {}
 
 scaffolder:
-  # see https://backstage.io/docs/features/software-templates/configuration for software template options  
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options
   defaultAuthor:
-    email: 'backstage@returngis.net'
-    name: 'Backstage Team'
-  defaultCommitMessage: 'chore: scaffolded files from template'
+    email: "backstage@returngis.net"
+    name: "Backstage Team"
+  defaultCommitMessage: "chore: scaffolded files from template"
 
 catalog:
-  orphanStrategy: delete  
+  orphanStrategy: delete
   providers:
+    githubOrg:
+      id: dragonstone-org
+      organization: dragonstone-org
+      orgs: [dragonstone-org]
+      githubUrl: https://github.com/
+      catalogPath: '/catalog-info.yaml'
+      filters:
+        branch: main
+      schedule:
+        frequency: PT1M
+        timeout: PT30S
     github:
-      returngisOrg:        
-        organization: returngis
-        catalogPath: '/catalog-info.yaml'
-        filters:
-          branch: main
-        schedule:
-          frequency: { minutes: 60 }
-          timeout: { minutes: 3 }          
-      personalAccount:
-        organization: 0GiS0
-        catalogPath: '/catalog-info.yaml'
-        filters:
-          branch: main
-          allowForks: false
-          topic:
-            include:
-              - "backstage-include"            
-        schedule:
-          frequency: { minutes: 60 }     
+      organization: dragonstone-org
+      catalogPath: '/catalog-info.yaml'
+      filters:
+        branch: main
+      schedule:
+          frequency: { minutes: 1 }
           timeout: { minutes: 3 }
+    # githubOrg:
+    #   id: returngis
+    #   organization: returngis
+    #   orgs: [returngis]
+    #   githubUrl: https://github.com/
+    #   schedule:
+    #     frequency: PT1M
+    #     timeout: PT30S
+    # returngisOrg:
+    #   organization: returngis
+    #   catalogPath: '/catalog-info.yaml'
+    #   filters:
+    #     branch: main
+    #   schedule:
+    #     frequency: { minutes: 60 }
+    #     timeout: { minutes: 3 }
+    # personalAccount:
+    #   organization: 0GiS0
+    #   catalogPath: '/catalog-info.yaml'
+    #   filters:
+    #     branch: main
+    #     allowForks: false
+    #     topic:
+    #       include:
+    #         - "backstage-include"
+    #   schedule:
+    #     frequency: { minutes: 60 }
+    #     timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [System, Domain, Component, API, Resource, Location, Template]
-  locations:
-    # Local example organizational data
-    - type: file
-      target: ../../examples/org.yaml
-      rules:
-        - allow: [User, Group]
-    #   # Local example data, file locations are relative to the backend process, typically `packages/backend`
-    #   - type: file
-    #     target: ../../examples/entities.yaml
+    - allow:
+        [
+          System,
+          Domain,
+          Component,
+          API,
+          Resource,
+          Location,
+          Template,
+          User,
+          Group,
+        ]
+  # locations:
+  #   - type: github-org
+  #     target: https://github.com/returngis
+  #     rules:
+  #       - allow: [User, Group]
+  # locations:
+  #   # Local example organizational data
+  #   - type: file
+  #     target: ../../examples/org.yaml
+  #     rules:
+  #       - allow: [User, Group]
+  #   # Local example data, file locations are relative to the backend process, typically `packages/backend`
+  #   - type: file
+  #     target: ../../examples/entities.yaml
 
-    #   # Local example template
-    #   - type: file
-    #     target: ../../examples/template/template.yaml
-    #     rules:
-    #       - allow: [Template]
+  #   # Local example template
+  #   - type: file
+  #     target: ../../examples/template/template.yaml
+  #     rules:
+  #       - allow: [Template]
 
-    ## Uncomment these lines to add more example data
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
+  ## Uncomment these lines to add more example data
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
 
-    ## Uncomment these lines to add an example org
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-    #   rules:
-    #     - allow: [User, Group]
-    # - type: url
-    #   target: https://github.com/0GiS0/backstage-demo/blob/main/software-templates/dotnet8-template.yaml
-    #   rules:
-    #     - allow: [Template]
+  ## Uncomment these lines to add an example org
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
+  #   rules:
+  #     - allow: [User, Group]
+  # - type: url
+  #   target: https://github.com/0GiS0/backstage-demo/blob/main/software-templates/dotnet8-template.yaml
+  #   rules:
+  #     - allow: [Template]

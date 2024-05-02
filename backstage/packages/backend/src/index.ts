@@ -54,6 +54,9 @@ backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 // github discovery
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
 
+// github org data
+backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
+
 // Register custom actions
 const scaffolderModuleCustomExtensions = createBackendModule({
   pluginId: 'scaffolder', // name of the plugin that the module is targeting
