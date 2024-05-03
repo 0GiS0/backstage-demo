@@ -83,42 +83,52 @@ scaffolder:
 
 catalog:
   orphanStrategy: delete
+  processingInterval: PT1M  
   providers:
+  # non-EMU
     githubOrg:
-      id: dragonstone-org
-      organization: dragonstone-org
-      orgs: [dragonstone-org]
-      githubUrl: https://github.com/
-      catalogPath: '/catalog-info.yaml'
-      filters:
-        branch: main
-      schedule:
-        frequency: PT1M
-        timeout: PT30S
+        id: returngis        
+        organization: returngis
+        orgs: [returngis]
+        githubUrl: https://github.com/
+        schedule:
+          frequency: PT1M
+          timeout: PT30S
     github:
-      organization: dragonstone-org
-      catalogPath: '/catalog-info.yaml'
-      filters:
-        branch: main
-      schedule:
-          frequency: { minutes: 1 }
+      returngisOrg:
+        organization: returngis
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: main
+        schedule:
+          frequency: { minutes: 60 }
           timeout: { minutes: 3 }
-    # githubOrg:
-    #   id: returngis
-    #   organization: returngis
-    #   orgs: [returngis]
-    #   githubUrl: https://github.com/
-    #   schedule:
-    #     frequency: PT1M
-    #     timeout: PT30S
-    # returngisOrg:
-    #   organization: returngis
-    #   catalogPath: '/catalog-info.yaml'
-    #   filters:
-    #     branch: main
-    #   schedule:
-    #     frequency: { minutes: 60 }
-    #     timeout: { minutes: 3 }
+  # # EMU
+  #   githubOrg:
+  #     id: emu-account    
+  #     orgs: [dragonstone-org, house-stark-org]
+  #     githubUrl: https://github.com/      
+  #     schedule:
+  #       frequency: PT1M
+  #       timeout: PT30S
+  #   github:
+  #     dragonstoneOrg:
+  #       organization: dragonstone-org
+  #       catalogPath: "/catalog-info.yaml"
+  #       filters:
+  #         branch: main
+  #       schedule:
+  #         frequency: { minutes: 1 }
+  #         timeout: { minutes: 3 }    
+  #     houseStarkOrg:
+  #       organization: house-stark-org
+  #       catalogPath: "/catalog-info.yaml"
+  #       filters:
+  #         branch: main
+  #       schedule:
+  #         frequency: { minutes: 1 }
+  #         timeout: { minutes: 3 }
+    
     # personalAccount:
     #   organization: 0GiS0
     #   catalogPath: '/catalog-info.yaml'
