@@ -39,3 +39,12 @@ spec:
     email: dc@returngis.net
     picture: https://cdn-icons-png.flaticon.com/128/805/805385.png
   children: []
+
+---
+
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: daenerys
+spec:
+  memberOf: [marvel]

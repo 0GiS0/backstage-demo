@@ -26,10 +26,13 @@ backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
 // auth plugin
 backend.add(import('@backstage/plugin-auth-backend'));
 // See https://backstage.io/docs/backend-system/building-backends/migrating#the-auth-plugin
-backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
+// backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 // See https://github.com/backstage/backstage/blob/master/docs/auth/guest/provider.md
-// For github login
-backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
+
+// For Microsoft login
+backend.add(import('@backstage/plugin-auth-backend-module-microsoft-provider'));
+
+
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend/alpha'));
@@ -54,8 +57,8 @@ backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 // github discovery
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
 
-// github org data
-backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
+// Microsoft Entra Id
+backend.add(import('@backstage/plugin-catalog-backend-module-msgraph/alpha'));
 
 // Register custom actions
 const scaffolderModuleCustomExtensions = createBackendModule({

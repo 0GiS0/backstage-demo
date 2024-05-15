@@ -42,17 +42,23 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import {
   SignInProviderConfig
 } from '@backstage/core-components';
-import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
 import { TwoColumnLayout } from './scaffolder/custom-layouts/TwoColum';
 
-const githubProvider: SignInProviderConfig = {
-  id: 'github-auth-provider',
-  title: 'GitHub',
-  message: 'Sign in using GitHub',
-  apiRef: githubAuthApiRef,
-};
+// const githubProvider: SignInProviderConfig = {
+//   id: 'github-auth-provider',
+//   title: 'GitHub',
+//   message: 'Sign in using GitHub',
+//   apiRef: githubAuthApiRef,
+// };
 
+const MicrosoftProvider: SignInProviderConfig = {
+  id: 'microsoft-auth-provider',
+  title: 'Microsoft',
+  message: 'Sign in using Microsoft',
+  apiRef: microsoftAuthApiRef,
+};
 
 const app = createApp({
   apis,
@@ -81,7 +87,8 @@ const app = createApp({
       <SignInPage
         {...props}
         auto
-        provider={githubProvider}
+        // provider={githubProvider}
+        provider={MicrosoftProvider}
       />
     ),
   },

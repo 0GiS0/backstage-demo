@@ -77,8 +77,17 @@ auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
   providers:
     # See https://backstage.io/docs/auth/guest/provider
-    guest: {}
-
+    microsoft:
+      development:
+        clientId: ${AZURE_CLIENT_ID}
+        clientSecret: ${AZURE_CLIENT_SECRET}
+        tenantId: ${AZURE_TENANT_ID}
+        domainHint: ${AZURE_TENANT_ID}
+        # additionalScopes:
+        #   - Mail.Send
+        signIn:
+          resolvers:
+            - resolver: emailMatchingUserEntityProfileEmail
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
   defaultAuthor:
@@ -89,61 +98,19 @@ scaffolder:
 catalog:
   orphanStrategy: delete
   providers:
-    # non-EMU
-    # githubOrg:
-    #     id: returngis
-    #     orgs: [returngis]
-    #     githubUrl: https://github.com/
-    #     schedule:
-    #       frequency: PT1M
-    #       timeout: PT30S
-    # github:
-    #   returngisOrg:
-    #     organization: returngis
-    #     catalogPath: '/catalog-info.yaml'
-    #     filters:
-    #       branch: main
-    #     schedule:
-    #       frequency: { minutes: 60 }
-    #       timeout: { minutes: 3 }
-    # EMU
-    githubOrg:
-      id: emu-account
-      orgs: [dragonstone-org, house-stark-org]
-      githubUrl: https://github.com/
+    microsoftGraphOrg:
+      authority: https://login.microsoftonline.com/${AZURE_TENANT_ID}
+      clientId: ${AZURE_CLIENT_ID}
+      clientSecret: ${AZURE_CLIENT_SECRET}
+      tenantId: ${AZURE_TENANT_ID}
+      tokenAudience: https://graph.microsoft.com
+      user:
+        filter: "accountEnabled eq true and userType eq 'Member'"
+      group:
+        filter: securityEnabled eq true
       schedule:
         frequency: PT1M
-        timeout: PT30S
-    github:
-      dragonstoneOrg:
-        organization: dragonstone-org
-        catalogPath: "/catalog-info.yaml"
-        filters:
-          branch: main
-        schedule:
-          frequency: { minutes: 1 }
-          timeout: { minutes: 3 }
-      houseStarkOrg:
-        organization: house-stark-org
-        catalogPath: "/catalog-info.yaml"
-        filters:
-          branch: main
-        schedule:
-          frequency: { minutes: 1 }
-          timeout: { minutes: 3 }
-
-    # personalAccount:
-    #   organization: 0GiS0
-    #   catalogPath: '/catalog-info.yaml'
-    #   filters:
-    #     branch: main
-    #     allowForks: false
-    #     topic:
-    #       include:
-    #         - "backstage-include"
-    #   schedule:
-    #     frequency: { minutes: 60 }
-    #     timeout: { minutes: 3 }
+        timeout: PT50M
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
