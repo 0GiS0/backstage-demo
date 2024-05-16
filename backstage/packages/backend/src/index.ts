@@ -55,7 +55,8 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 
 // github discovery
-backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
+// backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
+backend.add(import('@backstage/plugin-catalog-backend-module-azure/alpha'));
 
 // Microsoft Entra Id
 backend.add(import('@backstage/plugin-catalog-backend-module-msgraph/alpha'));

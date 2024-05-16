@@ -3568,6 +3568,21 @@
     "@react-hookz/web" "^24.0.0"
     "@types/react" "^16.13.1 || ^17.0.0 || ^18.0.0"
 
+"@backstage/plugin-catalog-backend-module-azure@^0.1.38":
+  version "0.1.38"
+  resolved "https://registry.yarnpkg.com/@backstage/plugin-catalog-backend-module-azure/-/plugin-catalog-backend-module-azure-0.1.38.tgz#7e7a06d2ca5be43e8013887601d259000014e0cb"
+  integrity sha512-H3d4UThnU+EUCFfH3lBPvm0mYXdAQ/GG4blg71Oe8nfjm9eN9yATxq8r74430Xyi1xn+2HVbVbLyvWpgpIp/ig==
+  dependencies:
+    "@backstage/backend-common" "^0.22.0"
+    "@backstage/backend-plugin-api" "^0.6.18"
+    "@backstage/backend-tasks" "^0.5.23"
+    "@backstage/config" "^1.2.0"
+    "@backstage/integration" "^1.11.0"
+    "@backstage/plugin-catalog-common" "^1.0.23"
+    "@backstage/plugin-catalog-node" "^1.12.0"
+    node-fetch "^2.6.7"
+    uuid "^9.0.0"
+
 "@backstage/plugin-catalog-backend-module-github-org@^0.1.12":
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/@backstage/plugin-catalog-backend-module-github-org/-/plugin-catalog-backend-module-github-org-0.1.12.tgz#031dd9e1b67cd0a461e71fbf1e409ee1e9aa095e"
@@ -9651,9 +9666,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^16.13.1 || ^17.0.0 || ^18.0.0":
-  version "18.3.1"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.1.tgz#fed43985caa834a2084d002e4771e15dfcbdbe8e"
-  integrity sha512-V0kuGBX3+prX+DQ/7r2qsv1NsdfnCLnTgnRJ1pYnxykBhGMz+qj+box5lq7XsO5mtZsBqpjwwTu/7wszPfMBcw==
+  version "18.3.2"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.2.tgz#462ae4904973bc212fa910424d901e3d137dbfcd"
+  integrity sha512-Btgg89dAnqD4vV7R3hlwOxgqobUQKgx3MmrQRi0yYbs/P0ym8XozIAlkqVilPqHQwXs4e9Tf63rrCgl58BcO4w==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"

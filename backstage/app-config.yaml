@@ -97,6 +97,7 @@ scaffolder:
 
 catalog:
   orphanStrategy: delete
+  
   providers:
     microsoftGraphOrg:
       authority: https://login.microsoftonline.com/${AZURE_TENANT_ID}
@@ -111,6 +112,19 @@ catalog:
       schedule:
         frequency: PT1M
         timeout: PT50M
+    
+    azureDevOps:
+      returngisorg:
+        organization: returngisorg
+        # project: "*" # this will match all projects
+        project: '*'
+        # project: Backstage # this will match all projects
+        # repository: '*' # this will match all repos
+        path: /catalog-info.yaml
+        schedule:
+          frequency: { minutes: 1 }
+          # supports ISO duration, "human duration" as used in code
+          timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration

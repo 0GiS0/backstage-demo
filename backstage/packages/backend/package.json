@@ -26,6 +26,7 @@
     "@backstage/plugin-auth-backend-module-guest-provider": "^0.1.2",
     "@backstage/plugin-auth-node": "^0.4.11",
     "@backstage/plugin-catalog-backend": "^1.21.0",
+    "@backstage/plugin-catalog-backend-module-azure": "^0.1.38",
     "@backstage/plugin-catalog-backend-module-github": "^0.6.0",
     "@backstage/plugin-catalog-backend-module-github-org": "^0.1.12",
     "@backstage/plugin-catalog-backend-module-msgraph": "^0.5.26",
