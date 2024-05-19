@@ -12,19 +12,59 @@ There are the steps to deploy Backstage on Azure Container Apps.
 ### 0.Variables
 
 ```bash
-RESOURCE_GROUP=backstage-on-aca-7
-ACR_NAME=backstageimages7
+RESOURCE_GROUP=backstage-on-aca
+ACR_NAME=backstageimages
 LOCATION=northeurope
-AZURE_KEY_VAULT_NAME=backstage-key-vault7
+AZURE_KEY_VAULT_NAME=backstage-key-vault
 DB_PASSWORD=@P0stgres$RANDOM
-DB_SERVER_NAME=backdb7
-CONTAINERAPPS_ENVIRONMENT=backstage-environment-7
-AZURE_STORAGE_ACCOUNT=backstagestorage7
+DB_SERVER_NAME=backdb
+CONTAINERAPPS_ENVIRONMENT=backstage-environment
+AZURE_STORAGE_ACCOUNT=backstagestorage
 AZURE_STORAGE_CONTAINER=docs
-IDENTITY_NAME=backstage-identity-7
+IDENTITY_NAME=backstage-identity
+```
+
+### 0.Register an application in Azure Active Directory
+
+
+```bash
+
+source ../.env
+
+az login --tenant $AZURE_TENANT_ID --allow-no-subscriptions
+
+CLIENT_ID=$(az ad app create --display-name "backstage-on-aca" --query appId -o tsv)
+
+#Generate a secret for the app
+CLIENT_SECRET=$(az ad app credential reset --id $CLIENT_ID --credential-description "backstage-on-aca" --query password -o tsv)
+
+# Add the following API Permissions:
+# Microsoft Graph:
+# - User.Read
+# - User.Read.All
+# profile
+# offline_access
+# email
+# openid
+# GroupMember.Read.All
+
+# https://learn.microsoft.com/en-us/graph/permissions-reference
+az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope # User.Read
+az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions a154be20-db9c-4678-8ab7-66f6cc099a59=Scope # User.Read.All
+az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 37f7f235-527c-4136-accd-4a02d197296e=Scope # openid
+az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 64a6cdd6-aab1-4aaf-94b8-3cc8405e90d0=Scope # email
+az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 7427e0e9-2fba-42fe-b0c0-848c9e6a8182=Scope # offline_access
+az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 14dad69e-099b-42c9-810b-d002981feec1=Scope # profile
+
+az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 98830695-27a2-44f7-8c18-0c3ebc9698f6=Role # GroupMember.Read.All
+
+# Grant admin consent
+az ad app permission admin-consent --id $CLIENT_ID
 ```
 
 ### 1. Login to Azure
+
+If you want to deploy your resources in a different subscription, you can use the following command:
 
 ```bash
 az login --use-device-code
@@ -144,13 +184,13 @@ TECHDOCS_AZURE_ACCOUNT_KEY_URI=$(az keyvault secret set \
 AZURE_CLIENT_ID_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name AZURE-CLIENT-ID \
---value $AZURE_CLIENT_ID \
+--value $CLIENT_ID \
 --query id -o tsv)
 
 AZURE_CLIENT_SECRET_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name AZURE-CLIENT-SECRET \
---value $AZURE_CLIENT_SECRET \
+--value $CLIENT_SECRET \
 --query id -o tsv)
 
 AZURE_TENANT_ID_URI=$(az keyvault secret set \
@@ -283,6 +323,5 @@ CONTAINER_APP_URL=$(az containerapp show --name backstage --resource-group $RESO
 Update App Registration with the following redirect URI:
 
 ```bash
-az login --tenant $AZURE_TENANT_ID --allow-no-subscriptions
 az ad app update --id ${AZURE_CLIENT_ID} --web-redirect-uris "https://${CONTAINER_APP_URL}/api/auth/microsoft/handler/frame"
 ```
