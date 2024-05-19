@@ -76,6 +76,7 @@ az acr create --resource-group $RESOURCE_GROUP --name $ACR_NAME --sku Basic --ad
 ```bash
 
 # az acr build --image backstage:{{.Run.ID}} --registry $ACR_NAME --file packages/backend/Dockerfile .
+az acr run -f acr-task.yaml
 ```
 
 ### 6.Build the Docker image for Backstage
