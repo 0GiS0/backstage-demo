@@ -12,15 +12,15 @@ There are the steps to deploy Backstage on Azure Container Apps.
 ### 0.Variables
 
 ```bash
-RESOURCE_GROUP=backstage-on-aca-3
-ACR_NAME=backstageimages3
+RESOURCE_GROUP=backstage-on-aca-7
+ACR_NAME=backstageimages7
 LOCATION=northeurope
-AZURE_KEY_VAULT_NAME=backstage-key-vault3
+AZURE_KEY_VAULT_NAME=backstage-key-vault7
 DB_PASSWORD=@P0stgres$RANDOM
-DB_SERVER_NAME=backdb3
-CONTAINERAPPS_ENVIRONMENT=backstage-environment-3
-AZURE_STORAGE_ACCOUNT=backstagestorage3
-IDENTITY_NAME=backstage-identity-3
+DB_SERVER_NAME=backdb7
+CONTAINERAPPS_ENVIRONMENT=backstage-environment-7
+AZURE_STORAGE_ACCOUNT=backstagestorage7
+IDENTITY_NAME=backstage-identity-7
 ```
 
 ### 1. Login to Azure
@@ -48,6 +48,8 @@ POSTGRES_SERVER_FQDN=$(az postgres flexible-server create \
 
 POSTGRES_SERVER_FQDN=$(az postgres flexible-server show --resource-group $RESOURCE_GROUP --name $DB_SERVER_NAME --query fullyQualifiedDomainName -o tsv)
 
+# Disable SSL transport
+ az postgres flexible-server parameter set --server-name $DB_SERVER_NAME --resource-group $RESOURCE_GROUP --name require_secure_transport --value off 
 ```
 
 ### 4.Create an Azure Storage Account
@@ -71,8 +73,8 @@ az acr create --resource-group $RESOURCE_GROUP --name $ACR_NAME --sku Basic --ad
 ```
 
 ```bash
-az acr login --name $ACR_NAME
-az acr build --image backstage:{{.Run.ID}} --registry $ACR_NAME --file packages/backend/Dockerfile .
+
+# az acr build --image backstage:{{.Run.ID}} --registry $ACR_NAME --file packages/backend/Dockerfile .
 ```
 
 ### 6.Build the Docker image for Backstage
@@ -90,6 +92,7 @@ docker build -t $ACR_NAME.azurecr.io/backstage:v1 -f packages/backend/Dockerfile
 ### 7.Push the image to the Azure Container Registry
 
 ```bash
+az acr login --name $ACR_NAME
 docker push $ACR_NAME.azurecr.io/backstage:v1
 ```
 
@@ -169,7 +172,7 @@ POSTGRES_PORT_URI=$(az keyvault secret set \
 POSTGRES_USER_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name POSTGRES-USER \
---value postgres@$DB_SERVER_NAME \
+--value postgres \
 --query id -o tsv)
 
 POSTGRES_PASSWORD_URI=$(az keyvault secret set \
@@ -253,8 +256,8 @@ az containerapp create \
 --resource-group $RESOURCE_GROUP \
 --min-replicas 1 \
 --image $ACR_NAME.azurecr.io/backstage:v1 \
---secrets "backend-secret=keyvaultref:$BACKEND_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-personal-access-token=keyvaultref:$AZURE_PERSONAL_ACCESS_TOKEN_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-container-name=keyvaultref:$TECHDOCS_AZURE_CONTAINER_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-name=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-key=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_KEY_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-id=keyvaultref:$AZURE_CLIENT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-secret=keyvaultref:$AZURE_CLIENT_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-tenant-id=keyvaultref:$AZURE_TENANT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-host=keyvaultref:$POSTGRES_HOST_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-port=keyvaultref:$POSTGRES_PORT_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-user=keyvaultref:$POSTGRES_USER_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-pasword=keyvaultref:$POSTGRES_PASSWORD_URI,identityref:$BACKSTAGE_IDENTITY_ID" \
---env-vars "BACKEND_SECRET=secretref:backend-secret" "AZURE_PERSONAL_ACCESS_TOKEN=secretref:azure-personal-access-token" "TECHDOCS_AZURE_CONTAINER_NAME=secretref:techdocs-azure-container-name" "TECHDOCS_AZURE_ACCOUNT_NAME=secretref:techdocs-azure-account-name" "TECHDOCS_AZURE_ACCOUNT_KEY=secretref:techdocs-azure-account-key" "AZURE_CLIENT_ID=secretref:azure-client-id" "AZURE_CLIENT_SECRET=secretref:azure-client-secret" "AZURE_TENANT_ID=secretref:azure-tenant-id" "POSTGRES_HOST=secretref:postgres-host" "POSTGRES_PORT=secretref:postgres-port" "POSTGRES_USER=secretref:postgres-user" "POSTGRES_PASSWORD=secretref:postgres-pasword" \
+--secrets "backend-secret=keyvaultref:$BACKEND_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-personal-access-token=keyvaultref:$AZURE_PERSONAL_ACCESS_TOKEN_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-container-name=keyvaultref:$TECHDOCS_AZURE_CONTAINER_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-name=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-key=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_KEY_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-id=keyvaultref:$AZURE_CLIENT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-secret=keyvaultref:$AZURE_CLIENT_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-tenant-id=keyvaultref:$AZURE_TENANT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-host=keyvaultref:$POSTGRES_HOST_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-port=keyvaultref:$POSTGRES_PORT_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-user=keyvaultref:$POSTGRES_USER_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-password=keyvaultref:$POSTGRES_PASSWORD_URI,identityref:$BACKSTAGE_IDENTITY_ID" \
+--env-vars "BACKEND_SECRET=secretref:backend-secret" "AZURE_PERSONAL_ACCESS_TOKEN=secretref:azure-personal-access-token" "TECHDOCS_AZURE_CONTAINER_NAME=secretref:techdocs-azure-container-name" "TECHDOCS_AZURE_ACCOUNT_NAME=secretref:techdocs-azure-account-name" "TECHDOCS_AZURE_ACCOUNT_KEY=secretref:techdocs-azure-account-key" "AZURE_CLIENT_ID=secretref:azure-client-id" "AZURE_CLIENT_SECRET=secretref:azure-client-secret" "AZURE_TENANT_ID=secretref:azure-tenant-id" "POSTGRES_HOST=secretref:postgres-host" "POSTGRES_PORT=secretref:postgres-port" "POSTGRES_USER=secretref:postgres-user" "POSTGRES_PASSWORD=secretref:postgres-password" \
 --user-assigned $BACKSTAGE_IDENTITY_ID \
 --ingress external \
 --target-port 7007 \
@@ -263,17 +266,21 @@ az containerapp create \
 --registry-server $ACR_NAME.azurecr.io 
 ```
 
+Check logs
+
+```bash
+az containerapp logs show --name backstage --resource-group $RESOURCE_GROUP
+```
+
 ### 12. Get the URL of the Azure Container Apps
 
 ```bash
-az containerapp show --name backstage --resource-group $RESOURCE_GROUP --query "ingressEndpoints[0].url" -o tsv
-
-CONTAINER_APP_URL=$(az containerapp show --name backstage --resource-group $RESOURCE_GROUP --query "ingressEndpoints[0].url" -o tsv)
+CONTAINER_APP_URL=$(az containerapp show --name backstage --resource-group $RESOURCE_GROUP --query "properties.configuration.ingress.fqdn" -o tsv)
 ```
 
 Update App Registration with the following redirect URI:
 
 ```bash
-az login --tenant $AZURE_TENANT_ID
-az ad app update --id ${AZURE_CLIENT_ID} --web-redirect-uris "${CONTAINER_APP_URL}/api/auth/microsoft/handler/frame"
+az login --tenant $AZURE_TENANT_ID --allow-no-subscriptions
+az ad app update --id ${AZURE_CLIENT_ID} --web-redirect-uris "https://${CONTAINER_APP_URL}/api/auth/microsoft/handler/frame"
 ```
