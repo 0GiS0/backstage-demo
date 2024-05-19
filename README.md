@@ -20,6 +20,7 @@ DB_PASSWORD=@P0stgres$RANDOM
 DB_SERVER_NAME=backdb7
 CONTAINERAPPS_ENVIRONMENT=backstage-environment-7
 AZURE_STORAGE_ACCOUNT=backstagestorage7
+AZURE_STORAGE_CONTAINER=docs
 IDENTITY_NAME=backstage-identity-7
 ```
 
@@ -62,7 +63,7 @@ az storage account create \
 --sku Standard_LRS
 
 az storage container create \
---name docs \
+--name $AZURE_STORAGE_CONTAINER \
 --account-name $AZURE_STORAGE_ACCOUNT
 ```
 
@@ -122,7 +123,7 @@ AZURE_PERSONAL_ACCESS_TOKEN_URI=$(az keyvault secret set \
 TECHDOCS_AZURE_CONTAINER_NAME_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name TECHDOCS-AZURE-CONTAINER-NAME \
---value docs \
+--value $AZURE_STORAGE_CONTAINER \
 --query id -o tsv)
 
 TECHDOCS_AZURE_ACCOUNT_NAME_URI=$(az keyvault secret set \
