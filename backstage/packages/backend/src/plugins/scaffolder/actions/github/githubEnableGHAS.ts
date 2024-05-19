@@ -13,6 +13,10 @@ async function getOctokitOptions(options: {
 
     const { owner, repo, host } = parseRepoUrl(repoUrl, integrations);
 
+    if (!owner || !repo || !host) {
+        throw new InputError('Invalid repo URL');
+    }
+
     const integrationConfig = integrations.github.byHost(host)?.config;
 
     if (!integrationConfig) {

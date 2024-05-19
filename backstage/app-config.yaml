@@ -1,6 +1,6 @@
 app:
   title: Scaffolded Backstage App
-  baseUrl: http://localhost:3000
+  baseUrl: "http://localhost:3000"
 
 organization:
   name: My Company
@@ -9,14 +9,11 @@ backend:
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/auth/service-to-service-auth for
   # information on the format
-  # auth:
-  #   keys:
-  #     - secret: ${BACKEND_SECRET}
   baseUrl: http://localhost:7007
   listen:
     port: 7007
     # Uncomment the following host directive to bind to specific interfaces
-    # host: 127.0.0.1
+    # host: 0.0.0.0
   csp:
     connect-src: ["'self'", "http:", "https:"]
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
@@ -25,6 +22,8 @@ backend:
     origin: http://localhost:3000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
+    allowedHeaders: "*"
+
   # This is for local development only, it is not recommended to use this in production
   # The production database configuration is stored in app-config.production.yaml
   database:
@@ -39,15 +38,9 @@ backend:
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
-  github:
-    - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
+  azure:
+    - host: dev.azure.com
+      token: ${AZURE_PERSONAL_ACCESS_TOKEN}
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -74,6 +67,7 @@ techdocs:
         accountKey: ${TECHDOCS_AZURE_ACCOUNT_KEY}
 
 auth:
+  environment: development
   # see https://backstage.io/docs/auth/ to learn about auth providers
   providers:
     # See https://backstage.io/docs/auth/guest/provider
@@ -83,8 +77,6 @@ auth:
         clientSecret: ${AZURE_CLIENT_SECRET}
         tenantId: ${AZURE_TENANT_ID}
         domainHint: ${AZURE_TENANT_ID}
-        # additionalScopes:
-        #   - Mail.Send
         signIn:
           resolvers:
             - resolver: emailMatchingUserEntityProfileEmail
@@ -97,7 +89,7 @@ scaffolder:
 
 catalog:
   orphanStrategy: delete
-  
+
   providers:
     microsoftGraphOrg:
       authority: https://login.microsoftonline.com/${AZURE_TENANT_ID}
@@ -112,12 +104,12 @@ catalog:
       schedule:
         frequency: PT1M
         timeout: PT50M
-    
+
     azureDevOps:
       returngisorg:
         organization: returngisorg
         # project: "*" # this will match all projects
-        project: '*'
+        project: "*"
         # project: Backstage # this will match all projects
         # repository: '*' # this will match all repos
         path: /catalog-info.yaml
@@ -141,37 +133,3 @@ catalog:
           User,
           Group,
         ]
-  # locations:
-  #   - type: github-org
-  #     target: https://github.com/returngis
-  #     rules:
-  #       - allow: [User, Group]
-  # locations:
-  #   # Local example organizational data
-  #   - type: file
-  #     target: ../../examples/org.yaml
-  #     rules:
-  #       - allow: [User, Group]
-  #   # Local example data, file locations are relative to the backend process, typically `packages/backend`
-  #   - type: file
-  #     target: ../../examples/entities.yaml
-
-  #   # Local example template
-  #   - type: file
-  #     target: ../../examples/template/template.yaml
-  #     rules:
-  #       - allow: [Template]
-
-  ## Uncomment these lines to add more example data
-  # - type: url
-  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
-
-  ## Uncomment these lines to add an example org
-  # - type: url
-  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-  #   rules:
-  #     - allow: [User, Group]
-  # - type: url
-  #   target: https://github.com/0GiS0/backstage-demo/blob/main/software-templates/dotnet8-template.yaml
-  #   rules:
-  #     - allow: [Template]
