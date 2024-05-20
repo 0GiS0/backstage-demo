@@ -46,13 +46,6 @@ import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
 import { TwoColumnLayout } from './scaffolder/custom-layouts/TwoColum';
 
-// const githubProvider: SignInProviderConfig = {
-//   id: 'github-auth-provider',
-//   title: 'GitHub',
-//   message: 'Sign in using GitHub',
-//   apiRef: githubAuthApiRef,
-// };
-
 const MicrosoftProvider: SignInProviderConfig = {
   id: 'microsoft-auth-provider',
   title: 'Microsoft',
@@ -86,8 +79,7 @@ const app = createApp({
     SignInPage: props => (
       <SignInPage
         {...props}
-        auto
-        // provider={githubProvider}
+        auto        
         provider={MicrosoftProvider}
       />
     ),

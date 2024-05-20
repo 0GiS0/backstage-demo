@@ -39,15 +39,9 @@ backend:
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
-  github:
-    - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
+  azure:
+    - host: dev.azure.com      
+      token: ${ADO_PAT}
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -71,7 +65,7 @@ techdocs:
       containerName: ${TECHDOCS_AZURE_CONTAINER_NAME}
       credentials:
         accountName: ${TECHDOCS_AZURE_ACCOUNT_NAME}
-        accountKey: ${TECHDOCS_AZURE_ACCOUNT_KEY}
+        accountKey: ${TECHDOCS_AZURE_ACCOUNT_KEY} 
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
@@ -79,12 +73,10 @@ auth:
     # See https://backstage.io/docs/auth/guest/provider
     microsoft:
       development:
-        clientId: ${AZURE_CLIENT_ID}
-        clientSecret: ${AZURE_CLIENT_SECRET}
+        clientId: ${MICROSOFT_ENTRAID_CLIENT_ID}
+        clientSecret: ${MICROSOFT_ENTRAID_CLIENT_SECRET}
         tenantId: ${AZURE_TENANT_ID}
         domainHint: ${AZURE_TENANT_ID}
-        # additionalScopes:
-        #   - Mail.Send
         signIn:
           resolvers:
             - resolver: emailMatchingUserEntityProfileEmail
@@ -96,23 +88,20 @@ scaffolder:
   defaultCommitMessage: "chore: scaffolded files from template"
 
 catalog:
-  orphanStrategy: delete
-  
+  orphanStrategy: delete  
   providers:
     microsoftGraphOrg:
       authority: https://login.microsoftonline.com/${AZURE_TENANT_ID}
-      clientId: ${AZURE_CLIENT_ID}
-      clientSecret: ${AZURE_CLIENT_SECRET}
-      tenantId: ${AZURE_TENANT_ID}
-      tokenAudience: https://graph.microsoft.com
+      clientId: ${MICROSOFT_ENTRAID_CLIENT_ID}
+      clientSecret: ${MICROSOFT_ENTRAID_CLIENT_SECRET}
+      tenantId: ${AZURE_TENANT_ID}      
       user:
-        filter: "accountEnabled eq true and userType eq 'Member'"
+        filter: "accountEnabled eq true and userType eq 'Member'"        
       group:
         filter: securityEnabled eq true
       schedule:
         frequency: PT1M
-        timeout: PT50M
-    
+        timeout: PT50M    
     azureDevOps:
       returngisorg:
         organization: returngisorg
@@ -141,37 +130,4 @@ catalog:
           User,
           Group,
         ]
-  # locations:
-  #   - type: github-org
-  #     target: https://github.com/returngis
-  #     rules:
-  #       - allow: [User, Group]
-  # locations:
-  #   # Local example organizational data
-  #   - type: file
-  #     target: ../../examples/org.yaml
-  #     rules:
-  #       - allow: [User, Group]
-  #   # Local example data, file locations are relative to the backend process, typically `packages/backend`
-  #   - type: file
-  #     target: ../../examples/entities.yaml
-
-  #   # Local example template
-  #   - type: file
-  #     target: ../../examples/template/template.yaml
-  #     rules:
-  #       - allow: [Template]
-
-  ## Uncomment these lines to add more example data
-  # - type: url
-  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
-
-  ## Uncomment these lines to add an example org
-  # - type: url
-  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-  #   rules:
-  #     - allow: [User, Group]
-  # - type: url
-  #   target: https://github.com/0GiS0/backstage-demo/blob/main/software-templates/dotnet8-template.yaml
-  #   rules:
-  #     - allow: [Template]
+  
