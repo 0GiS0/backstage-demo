@@ -238,6 +238,8 @@ integrations:
 And test the integration:
 
 ```bash
+yarn --cwd packages/backend add @backstage/plugin-catalog-backend-module-azure
+
 yarn dev
 ```
 
@@ -406,11 +408,16 @@ Change your `app-config.yaml` file to include the Azure Blob Storage account:
 
 ```yaml
 techdocs:
-  storage:
+  builder: "external" # Alternatives - 'local'
+  generator:
+    runIn: "docker" # Alternatives - 'local'
+  publisher:
+    type: "azureBlobStorage" # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
     azureBlobStorage:
-      accountName: ${AZURE_STORAGE_ACCOUNT_NAME}
-      accountKey: ${AZURE_STORAGE_ACCOUNT_KEY}
-      containerName: ${AZURE_STORAGE_CONTAINER_NAME}
+      containerName: ${TECHDOCS_AZURE_CONTAINER_NAME}
+      credentials:
+        accountName: ${TECHDOCS_AZURE_ACCOUNT_NAME}
+        accountKey: ${TECHDOCS_AZURE_ACCOUNT_KEY} 
 ```
 
 Now you need to create an Azure Pipeline to build your documentation. You can use the following `azure-pipelines.yml` file:
