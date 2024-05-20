@@ -4,4 +4,4 @@ steps:
     env: 
       - DOCKER_BUILDKIT=1
   - push: 
-  - "$Registry/backstage:$ID"
+    - "$Registry/backstage:$ID"
