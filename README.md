@@ -56,6 +56,9 @@ az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000
 az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions df021288-bdef-4463-88db-98f22de89214=Role # User.Read.All
 az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 98830695-27a2-44f7-8c18-0c3ebc9698f6=Role # GroupMember.Read.All
 
+# Wait for the permissions to be granted
+sleep 30
+
 # Grant admin consent
 az ad app permission admin-consent --id $CLIENT_ID
 ```
