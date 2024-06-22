@@ -79,7 +79,7 @@ techdocs:
         accountName: ${TECHDOCS_AZURE_ACCOUNT_NAME}
         accountKey: ${TECHDOCS_AZURE_ACCOUNT_KEY}
 
-auth:
+auth:  
   # see https://backstage.io/docs/auth/ to learn about auth providers
   providers:
     # See https://backstage.io/docs/auth/guest/provider
@@ -118,7 +118,7 @@ catalog:
       orgs: [dragonstone-org, house-stark-org]
       githubUrl: https://github.com/
       schedule:
-        frequency: PT1M
+        frequency: PT30M
         timeout: PT30S
     github:
       dragonstoneOrg:
@@ -127,7 +127,7 @@ catalog:
         filters:
           branch: main
         schedule:
-          frequency: { minutes: 1 }
+          frequency: { minutes: 30 }
           timeout: { minutes: 3 }
       houseStarkOrg:
         organization: house-stark-org
@@ -135,7 +135,7 @@ catalog:
         filters:
           branch: main
         schedule:
-          frequency: { minutes: 1 }
+          frequency: { minutes: 30 }
           timeout: { minutes: 3 }
 
     # personalAccount:

@@ -13,6 +13,10 @@ async function getOctokitOptions(options: {
 
     const { owner, repo, host } = parseRepoUrl(repoUrl, integrations);
 
+    if (!owner || !repo || !host) {
+        throw new InputError('Invalid repo URL');
+    }
+
     const integrationConfig = integrations.github.byHost(host)?.config;
 
     if (!integrationConfig) {
@@ -110,7 +114,7 @@ export function githubEnableGHAS(options: {
                 ctx.logger.info(`Code Scanning: ${code_scanning}`);
                 ctx.logger.info(`Secret Scanning: ${secret_scanning}`);
                 ctx.logger.info(`Push Secret Protection: ${push_secret_protection}`);
-                ctx.logger.info(`Dependabot: ${dependabot}`);                
+                ctx.logger.info(`Dependabot: ${dependabot}`);
 
                 const { owner, repo } = parseRepoUrl(repoUrl, integrations);
 
@@ -127,7 +131,7 @@ export function githubEnableGHAS(options: {
 
                 // ctx.logger.info(`Got token from ${octoKitOptions.auth}`);
 
-                const octokit = new Octokit(octoKitOptions);                
+                const octokit = new Octokit(octoKitOptions);
 
                 await octokit.request('PATCH /repos/{owner}/{repo}', {
                     owner: owner,

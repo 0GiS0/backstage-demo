@@ -1,17 +1,24 @@
 app:
+  title: ${APP_TITLE}
   # Should be the same as backend.baseUrl when using the `app-backend` plugin.
-  baseUrl: http://localhost:7007
+  baseUrl: "https://backstage.${CONTAINER_APP_ENV_DNS_SUFFIX}"
+
+organization:
+  name: ${ORGANIZATION_NAME}
 
 backend:
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
   # Note that the baseUrl should be the URL that the browser and other clients
   # should use when communicating with the backend, i.e. it needs to be
   # reachable not just from within the backend host, but from all of your
   # callers. When its value is "http://localhost:7007", it's strictly private
   # and can't be reached by others.
-  baseUrl: http://localhost:7007
+  baseUrl: "https://backstage.${CONTAINER_APP_ENV_DNS_SUFFIX}"
   # The listener can also be expressed as a single <host>:<port> string. In this case we bind to
   # all interfaces, the most permissive setting. The right value depends on your specific deployment.
-  listen: ':7007'
+  listen: ":7007"
 
   # config options: https://node-postgres.com/api/client
   database:
@@ -29,9 +36,18 @@ backend:
       #     $file: <file-path>/ca/server.crt
 
 auth:
+  environment: production
+  # see https://backstage.io/docs/auth/ to learn about auth providers
   providers:
-    guest: null
-
+    # See https://backstage.io/docs/auth/guest/provider
+    github:      
+      production:
+        clientId: ${GITHUB_APP_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_CLIENT_SECRET}
+        callbackUrl: https://backstage.${CONTAINER_APP_ENV_DNS_SUFFIX}/api/auth/github
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
 catalog:
   # Overrides the default list locations from app-config.yaml as these contain example data.
   # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details
