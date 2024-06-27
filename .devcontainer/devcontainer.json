@@ -10,10 +10,23 @@
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {
 			"nodeGypDependencies": true,
+			"installYarnUsingApt": true,
 			"version": "18",
 			"nvmVersion": "latest"
 		},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"moby": true,
+			"azureDnsAutoDetection": true,
+			"installDockerBuildx": true,
+			"installDockerComposeSwitch": true,
+			"version": "latest",
+			"dockerDashComposeVersion": "latest"
+		},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+			"version": "latest",
+			"helm": "latest",
+			"minikube": "latest"
+		}
 	},
 	"forwardPorts": [
 		3000,
@@ -29,10 +42,12 @@
 		"vscode": {
 			"extensions": [
 				"ms-ossdata.vscode-postgresql",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"ms-kubernetes-tools.vscode-kubernetes-tools"
 			]
 		}
-	}
+	},
+	"postCreateCommand": "minikube start"
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
