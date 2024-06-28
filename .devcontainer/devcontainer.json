@@ -26,6 +26,12 @@
 			"version": "latest",
 			"helm": "latest",
 			"minikube": "latest"
+		},
+		"ghcr.io/devcontainers-contrib/features/direnv-asdf:2": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/azure-cli:1": {
+			"version": "latest"
 		}
 	},
 	"forwardPorts": [
@@ -43,11 +49,13 @@
 			"extensions": [
 				"ms-ossdata.vscode-postgresql",
 				"redhat.vscode-yaml",
-				"ms-kubernetes-tools.vscode-kubernetes-tools"
+				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"GitHub.copilot",
+				"GitHub.copilot-chat"
 			]
 		}
 	},
-	"postCreateCommand": "minikube start"
+	"postCreateCommand": "bash .devcontainer/init.sh"
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

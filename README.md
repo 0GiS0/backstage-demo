@@ -11,4 +11,3 @@ kubectl apply -f k8s-manifests
 
 kubectl get secret dice-roller-token -o go-template='{{.data.token | base64decode}}'
 ```
-
