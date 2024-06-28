@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: tour-of-heroes-sql
+        'backstage.io/kubernetes-id': tour-of-heroes
     spec:
       terminationGracePeriodSeconds: 30
       hostname: mssqlinst

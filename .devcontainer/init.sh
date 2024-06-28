@@ -5,7 +5,7 @@ minikube start
 kubectl apply -f backstage/k8s-manifests/dice-roller-manifests.yaml
 
 kubectl create ns tour-of-heroes
-kubectl apply -f backstage/k8s-manifests/tour-of-heroes --recursive
+kubectl apply -f backstage/k8s-manifests/tour-of-heroes --recursive --namespace=tour-of-heroes
 
 echo "Get MINIKUBE URL"
 
