@@ -11,4 +11,21 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: 0GiS0
+  owner: user:0GiS0
+
+---
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tour-of-heroes
+  description: An Angular app that helps you manage your heroes
+  tags:
+    - go
+  annotations:
+    "backstage.io/kubernetes-id": tour-of-heroes
+    "backstage.io/kubernetes-namespace": tour-of-heroes
+spec:
+  type: service
+  lifecycle: production
+  owner: user:0GiS0

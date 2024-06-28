@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sql-pvc
+  labels:
+    'backstage.io/kubernetes-id': tour-of-heroes
+spec:  
+  storageClassName: managed-csi  
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi

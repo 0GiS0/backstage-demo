@@ -4,6 +4,9 @@ minikube start
 
 kubectl apply -f backstage/k8s-manifests/dice-roller-manifests.yaml
 
+kubectl create ns tour-of-heroes
+kubectl apply -f backstage/k8s-manifests/tour-of-heroes --recursive
+
 echo "Get MINIKUBE URL"
 
 MINIKUBE_URL=$(kubectl cluster-info | grep "Kubernetes control plane" | awk '{print $NF}' | sed 's/\x1b\[[0-9;]*m//g')
