@@ -6,8 +6,8 @@ auth:
     guest: {}
     github:
       development:
-        clientId: <YOUR_CLIENT_ID>
-        clientSecret: <YOUR_SECRET_ID>
+        clientId: <your-client-id>
+        clientSecret: <your-client-secret>
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
@@ -16,4 +16,16 @@ integrations:
     - host: github.com
       # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
       # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: github_pat_XXXX
+      token: ghp_xxxx
+kubernetes:
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters:
+        - url: https://192.168.49.2:8443
+          name: minikube
+          authProvider: 'serviceAccount'
+          skipTLSVerify: true
+          skipMetricsLookup: true
+          serviceAccountToken: eyJhbGciOiJSUzI1NiIsImtpZCI6IjRPRVlkTzFIWVduNHRHU1dZVWFSUHl0UzZ4RFpKQ1o4TVA3V1hPQW5nTE0ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRpY2Utcm9sbGVyLXRva2VuIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImRpY2Utcm9sbGVyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiZjc0ZTA3MDUtYzA0OS00NTMwLTliN2ItYjZjODI2ZDk5YWY5Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6ZGljZS1yb2xsZXIifQ.eGXiHO8CpWTc71cdxY1VXUGl6GcBjRJJ-JiTsLj62hcXEDxVU_ok3to4vr96Dz_2v434FLmBciHFCEt5_vpgZrKivH4fLokrv8418LWwKhrIO8MPHBzqFKBRBQGdmdlE00nzgPrGu69l6Q6euz-vyrB5dXkPAzivd0Xt2BzCKvr0JyaNfu2XXu9ARjoCf1at6D4bMilMPYUB96bvzQv5oL4HtuLcvWBXn2fTvpoXFUk4kVud-_LmfJnXMwf_NSZRNu86gJkjxin85BfeIpUFiHdejjeCCw0iXbCEOppxJqWk9D1sTSbQOblhguzq3TrvM_FbXVR2uT45LQCmbfDtCg
