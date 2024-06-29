@@ -23,3 +23,8 @@ echo "export MINIKUBE_TOKEN=$MINIKUBE_TOKEN" >> .env
 direnv hook bash >> ~/.bashrc
 
 direnv allow
+
+# Install kubelogin
+asdf plugin add kubelogin
+asdf install kubelogin latest
+asdf global kubelogin latest
