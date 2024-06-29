@@ -28,5 +28,8 @@ kubernetes:
           authProvider: 'serviceAccount'
           skipTLSVerify: true
           skipMetricsLookup: true
-          # serviceAccountToken: eyJhbGciOiJSUzI1NiIsImtpZCI6IjRPRVlkTzFIWVduNHRHU1dZVWFSUHl0UzZ4RFpKQ1o4TVA3V1hPQW5nTE0ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRpY2Utcm9sbGVyLXRva2VuIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImRpY2Utcm9sbGVyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiZjc0ZTA3MDUtYzA0OS00NTMwLTliN2ItYjZjODI2ZDk5YWY5Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6ZGljZS1yb2xsZXIifQ.eGXiHO8CpWTc71cdxY1VXUGl6GcBjRJJ-JiTsLj62hcXEDxVU_ok3to4vr96Dz_2v434FLmBciHFCEt5_vpgZrKivH4fLokrv8418LWwKhrIO8MPHBzqFKBRBQGdmdlE00nzgPrGu69l6Q6euz-vyrB5dXkPAzivd0Xt2BzCKvr0JyaNfu2XXu9ARjoCf1at6D4bMilMPYUB96bvzQv5oL4HtuLcvWBXn2fTvpoXFUk4kVud-_LmfJnXMwf_NSZRNu86gJkjxin85BfeIpUFiHdejjeCCw0iXbCEOppxJqWk9D1sTSbQOblhguzq3TrvM_FbXVR2uT45LQCmbfDtCg
           serviceAccountToken: ${MINIKUBE_TOKEN}
+        - url: https://dns-2166136261-iqxnjwoe.hcp.spaincentral.azmk8s.io
+          name: k8s-for-backstage
+          authProvider: azure
+          skipTLSVerify: true
