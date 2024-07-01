@@ -326,3 +326,15 @@ Update GitHub App the following redirect URI:
 ```bash
 echo "https://${CONTAINER_APP_URL}/api/auth/github"
 ```
+
+Clean-up
+
+```
+az group delete -n $RESOURCE_GROUP --yes
+```
+
+Purge Azure Key Vault
+
+```
+az keyvault purge -n $AZURE_KEY_VAULT_NAME
+```
