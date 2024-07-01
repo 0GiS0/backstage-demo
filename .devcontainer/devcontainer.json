@@ -14,7 +14,10 @@
 			"nvmVersion": "latest"
 		},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers/features/azure-cli:1": {}
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
+		"ghcr.io/devcontainers-contrib/features/direnv-asdf:2": {
+			"version": "latest"
+		}
 	},
 	"forwardPorts": [
 		3000,
@@ -33,7 +36,8 @@
 				"redhat.vscode-yaml"
 			]
 		}
-	}
+	},
+	"postCreateCommand": "direnv hook bash >> ~/.bashrc && direnv allow"
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
