@@ -44,7 +44,6 @@ auth:
       production:
         clientId: ${GITHUB_APP_CLIENT_ID}
         clientSecret: ${GITHUB_APP_CLIENT_SECRET}
-        callbackUrl: https://backstage.${CONTAINER_APP_ENV_DNS_SUFFIX}/api/auth/github
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName

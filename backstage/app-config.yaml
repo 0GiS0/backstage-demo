@@ -81,11 +81,18 @@ techdocs:
         accountName: ${TECHDOCS_AZURE_ACCOUNT_NAME}
         accountKey: ${TECHDOCS_AZURE_ACCOUNT_KEY}
 
-auth:
+auth:  
   # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
   providers:
     # See https://backstage.io/docs/auth/guest/provider
-    guest: {}
+    github:
+      development:
+        clientId: ${GITHUB_APP_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
