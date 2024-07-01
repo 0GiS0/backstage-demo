@@ -88,8 +88,8 @@ auth:
     # See https://backstage.io/docs/auth/guest/provider
     github:
       development:
-        clientId: ${LOCAL_GITHUB_CLIENT_ID}
-        clientSecret: ${LOCAL_GITHUB_CLIENT_SECRET}
+        clientId: ${GITHUB_APP_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_CLIENT_SECRET}
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName

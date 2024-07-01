@@ -25,54 +25,9 @@ IDENTITY_NAME=backstage-identity-gh
 
 echo "DB_PASSWORD=$DB_PASSWORD" >> .env
 
-```
-
-### 0.Register an application in Azure Active Directory
-
-```bash
-az login --tenant $AZURE_TENANT_ID --allow-no-subscriptions --use-device-code
-
-CLIENT_ID=$(az ad app create --display-name $RESOURCE_GROUP --query appId -o tsv)
-
-#Generate a secret for the app
-CLIENT_SECRET=$(az ad app credential reset --id $CLIENT_ID --query password -o tsv)
-
-# Save client id and client secret in the .env file
-
-echo "CLIENT_ID=$CLIENT_ID " >> .env
-echo "CLIENT_SECRET=$CLIENT_SECRET " >> .env
-
-
-# Add the following API Permissions:
-# Microsoft Graph:
-# - User.Read
-# - User.Read.All
-# profile
-# offline_access
-# email
-# openid
-# GroupMember.Read.All
-
-# https://learn.microsoft.com/en-us/graph/permissions-reference
-az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope # User.Read
-az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 37f7f235-527c-4136-accd-4a02d197296e=Scope # openid
-az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 64a6cdd6-aab1-4aaf-94b8-3cc8405e90d0=Scope # email
-az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 7427e0e9-2fba-42fe-b0c0-848c9e6a8182=Scope # offline_access
-az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 14dad69e-099b-42c9-810b-d002981feec1=Scope # profile
-
-az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions df021288-bdef-4463-88db-98f22de89214=Role # User.Read.All
-az ad app permission add --id $CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 98830695-27a2-44f7-8c18-0c3ebc9698f6=Role # GroupMember.Read.All
-
-# Wait for the permissions to be granted
-sleep 30
-
-# Grant admin consent
-az ad app permission admin-consent --id $CLIENT_ID
-```
-
 ### 1. Login to Azure
 
-If you want to deploy your resources in a different subscription, you can use the following command:
+First, you need to log in
 
 ```bash
 az login --use-device-code
@@ -179,13 +134,13 @@ TECHDOCS_AZURE_ACCOUNT_KEY_URI=$(az keyvault secret set \
 GITHUB_APP_CLIENT_ID_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name GITHUB-APP-CLIENT-ID \
---value $GITHUB_APP_CLIENT_ID \
+--value $GITHUB_CLIENT_ID \
 --query id -o tsv)
 
 GITHUB_APP_CLIENT_SECRET_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name GITHUB-APP-CLIENT-SECRET \
---value $GITHUB_APP_CLIENT_SECRET \
+--value $GITHUB_CLIENT_SECRET \
 --query id -o tsv)
 
 AZURE_TENANT_ID_URI=$(az keyvault secret set \
@@ -240,16 +195,16 @@ Check value of the secrets:
 
 ```bash
 echo "Backend secret: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name BACKEND-SECRET --query value -o tsv)"
-echo "GitHub token : $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name GITHUB-TOKEN --query value -o tsv)"
+echo "GitHub token: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name GITHUB-TOKEN --query value -o tsv)"
 echo "Azure Storage Container: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name TECHDOCS-AZURE-CONTAINER-NAME --query value -o tsv)"
-echo "Azure Storage Name : $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name TECHDOCS-AZURE-ACCOUNT-NAME --query value -o tsv)"
-echo "Azure Storage access key : $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name TECHDOCS-AZURE-ACCOUNT-KEY --query value -o tsv)"
-echo "GitHub App Client ID : $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name GITHUB-APP-CLIENT-ID --query value -o tsv)"
+echo "Azure Storage Name: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name TECHDOCS-AZURE-ACCOUNT-NAME --query value -o tsv)"
+echo "Azure Storage access key: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name TECHDOCS-AZURE-ACCOUNT-KEY --query value -o tsv)"
+echo "GitHub App Client ID: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name GITHUB-APP-CLIENT-ID --query value -o tsv)"
 echo "GitHub App Client Secret: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name GITHUB-APP-CLIENT-SECRET --query value -o tsv)"
-echo "Azure tenant ID : $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name AZURE-TENANT-ID --query value -o tsv)"
+echo "Azure tenant ID: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name AZURE-TENANT-ID --query value -o tsv)"
 echo "Postgres host: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-HOST --query value -o tsv)"
 echo "Postgres port: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-PORT --query value -o tsv)"
-echo "Postgres user :$(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-USER --query value -o tsv)"
+echo "Postgres user: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-USER --query value -o tsv)"
 echo "Postgres password: $(az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-PASSWORD --query value -o tsv)"
 ```
 
@@ -307,6 +262,12 @@ Check logs
 
 ```bash
 az containerapp logs show --name backstage --resource-group $RESOURCE_GROUP --follow
+```
+
+If you need to access to the console you can use `exec` command
+
+```
+az containerapp exec -n backstage -g $RESOURCE_GROUP
 ```
 
 ### 12. Get the URL of the Azure Container Apps
