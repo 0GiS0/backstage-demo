@@ -117,10 +117,17 @@ Get credentials:
 az aks get-credentials -g $RESOURCE_GROUP -n $AKS_CLUSTER_NAME --overwrite-existing
 ```
 
+Use kubelogin plugin for authentication:
+
+```bash
+kubelogin convert-kubeconfig -l azurecli
+```
+
+
 Check that it works:
 
 ```bash
-kubectl get nodes
+kubectl get deployments --all-namespaces=true
 ```
 
 Deploy tour of heroes app in this cluster:
