@@ -11,12 +11,7 @@ auth:
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
-integrations:
-  github:
-    - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: ghp_xxxx
+
 kubernetes:
   serviceLocatorMethod:
     type: 'multiTenant'
@@ -29,7 +24,7 @@ kubernetes:
           skipTLSVerify: true
           skipMetricsLookup: true
           serviceAccountToken: ${MINIKUBE_TOKEN}
-        # - url: https://dns-2166136261-iqxnjwoe.hcp.spaincentral.azmk8s.io
-        #   name: k8s-for-backstage
-        #   authProvider: azure
-        #   skipTLSVerify: true
+        - url: https://backstage--k8s-backstage-de-038239-srt0pdkp.hcp.spaincentral.azmk8s.io
+          name: backstage-cluster
+          authProvider: azure
+          skipTLSVerify: true

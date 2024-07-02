@@ -5,6 +5,7 @@ metadata:
     app: tour-of-heroes-sql
     'backstage.io/kubernetes-id': tour-of-heroes
   name: tour-of-heroes-sql
+  namespace: tour-of-heroes
 spec:
   selector:
     matchLabels:

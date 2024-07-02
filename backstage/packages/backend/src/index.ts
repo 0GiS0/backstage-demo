@@ -43,6 +43,7 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 // github integration
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 
+// Kubernetes plugin
 backend.add(import('@backstage/plugin-kubernetes-backend/alpha'));
 
 backend.start();

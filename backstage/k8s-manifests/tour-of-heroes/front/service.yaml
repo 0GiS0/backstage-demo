@@ -5,6 +5,7 @@ metadata:
     app: tour-of-heroes-web
     'backstage.io/kubernetes-id': tour-of-heroes
   name: tour-of-heroes-web
+  namespace: tour-of-heroes
 spec:
   type: LoadBalancer
   ports:
