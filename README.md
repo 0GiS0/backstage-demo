@@ -88,7 +88,7 @@ Load some variables for Azure:
 RESOURCE_GROUP="k8s-backstage"
 AKS_CLUSTER_NAME="backstage-cluster"
 LOCATION="spaincentral"
-$DEVS_GROUP_OBJECT_ID="562ed5c5-b4bc-4611-8be0-09a288fc2329"
+DEVS_GROUP_OBJECT_ID="562ed5c5-b4bc-4611-8be0-09a288fc2329"
 ```
 
 Create a resource group:
