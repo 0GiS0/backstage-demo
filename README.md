@@ -79,7 +79,7 @@ And add it to the [`index.tsx`](backstage/packages/backend/src/index.ts#47) file
 You have to log in first:
 
 ```bash
-az login
+az login --use-device-code
 ```
 
 Load some variables for Azure:
