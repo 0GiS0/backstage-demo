@@ -11,7 +11,7 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: user:0GiS0
+  owner: user:guest
 
 ---
 
@@ -28,4 +28,4 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: user:0GiS0
+  owner: user:guest

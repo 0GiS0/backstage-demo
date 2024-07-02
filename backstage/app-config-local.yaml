@@ -1,17 +1,3 @@
-# Backstage override configuration for your local development environment
-auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
-  environment: development
-  providers:
-    guest: {}
-    github:
-      development:
-        clientId: <your-client-id>
-        clientSecret: <your-client-secret>
-        signIn:
-          resolvers:
-            - resolver: usernameMatchingUserEntityName
-
 kubernetes:
   serviceLocatorMethod:
     type: 'multiTenant'
