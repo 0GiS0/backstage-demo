@@ -85,9 +85,10 @@ az login --use-device-code
 Load some variables for Azure:
 
 ```bash
-RESOURCE_GROUP="k8s-backstage-dev"
+RESOURCE_GROUP="k8s-backstage"
 AKS_CLUSTER_NAME="backstage-cluster"
 LOCATION="spaincentral"
+$DEVS_GROUP_OBJECT_ID="562ed5c5-b4bc-4611-8be0-09a288fc2329"
 ```
 
 Create a resource group:
@@ -106,6 +107,7 @@ az aks create \
 --node-count 1 \
 --node-vm-size Standard_B4ms \
 --enable-aad \
+--aad-admin-group-object-ids $DEVS_GROUP_OBJECT_ID \
 --generate-ssh-keys
 ```
 
