@@ -29,7 +29,7 @@ kubernetes:
           skipTLSVerify: true
           skipMetricsLookup: true
           serviceAccountToken: ${MINIKUBE_TOKEN}
-        - url: https://dns-2166136261-iqxnjwoe.hcp.spaincentral.azmk8s.io
-          name: k8s-for-backstage
-          authProvider: azure
-          skipTLSVerify: true
+        # - url: https://dns-2166136261-iqxnjwoe.hcp.spaincentral.azmk8s.io
+        #   name: k8s-for-backstage
+        #   authProvider: azure
+        #   skipTLSVerify: true
