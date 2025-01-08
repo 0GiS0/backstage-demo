@@ -1,3 +1,7 @@
-# Backstage demo
+# Backstage demos
 
-Hi developer 👋🏻! This is my playground around Backstage in order to learn how to configure the different features and integrations we can have for this IDP.
+¡Hola developer 👋🏻! Este repositorio contiene todas las demos que he ido compartiendo a través de [mi canal de YouTube](https://www.youtube.com/@returngis).
+
+Este repositorio tiene diferentes branches que están asociados a los diferentes vídeos:
+
+1. El branch main está asociado al vídeo: 
