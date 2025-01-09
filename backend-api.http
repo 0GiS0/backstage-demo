@@ -1,0 +1,7 @@
+@api_url = http://localhost:7007
+@access_token = hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx
+
+###
+
+GET {{ api_url }}/api/catalog/entities HTTP/1.1
+Authorization: Bearer {{access_token}}
