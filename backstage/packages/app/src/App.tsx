@@ -11,6 +11,7 @@ import {
   catalogImportPlugin,
 } from '@backstage/plugin-catalog-import';
 import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
+import { ScaffolderLayouts, ScaffolderFieldExtensions } from '@backstage/plugin-scaffolder-react';
 import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
@@ -38,10 +39,14 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
+
 import {
   SignInProviderConfig
 } from '@backstage/core-components';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
+
+import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
+import { TwoColumnLayout } from './scaffolder/custom-layout/TwoColumn';
 
 const githubProvider: SignInProviderConfig = {
   id: 'github-auth-provider',
@@ -104,7 +109,16 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage />} />
+    <Route path="/create" element={<ScaffolderPage />} >
+
+      <ScaffolderFieldExtensions>
+        <ValidateKebabCaseFieldExtension />
+      </ScaffolderFieldExtensions>
+      <ScaffolderLayouts>
+        <TwoColumnLayout />
+      </ScaffolderLayouts>
+    </Route>
+
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/tech-radar"

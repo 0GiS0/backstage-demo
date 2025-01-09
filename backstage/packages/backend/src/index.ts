@@ -10,6 +10,14 @@ import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
 
+
+import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
+import { DefaultGithubCredentialsProvider, ScmIntegrations } from '@backstage/integration';
+import { coreServices, createBackendModule } from '@backstage/backend-plugin-api';
+import { createNewFileAction } from './plugins/scaffolder/actions/common/createFile';
+import { githubEnableGHAS } from './plugins/scaffolder/actions/github/githubEnableGHAS';
+
+
 backend.add(import('@backstage/plugin-app-backend/alpha'));
 backend.add(import('@backstage/plugin-proxy-backend/alpha'));
 backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
@@ -45,5 +53,34 @@ backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 
 // github discovery
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
+
+// Register custom actions
+const scaffolderModuleCustomExtensions = createBackendModule({
+  pluginId: 'scaffolder', // name of the plugin that the module is targeting
+  moduleId: 'custom-extensions',
+  register(env) {
+    env.registerInit({
+      deps: {
+        scaffolder: scaffolderActionsExtensionPoint,
+        config: coreServices.rootConfig
+        // ... and other dependencies as needed
+      },
+      async init({ scaffolder, config /* ..., other dependencies */ }) {
+        // Here you have the opportunity to interact with the extension
+        // point before the plugin itself gets instantiated
+
+        const integrations = ScmIntegrations.fromConfig(config);
+        const githubCredentialsProvider = DefaultGithubCredentialsProvider.fromIntegrations(integrations);
+
+        // Create a new file
+        scaffolder.addActions(createNewFileAction()); 
+        // Enable GitHub Advanced Security
+        scaffolder.addActions(githubEnableGHAS({ integrations: integrations, githubCredentialsProvider: githubCredentialsProvider })); 
+      },
+    });
+  },
+});
+
+backend.add(scaffolderModuleCustomExtensions);
 
 backend.start();

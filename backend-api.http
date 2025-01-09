@@ -1,7 +1,45 @@
-@api_url = http://localhost:7007
+@api_url = http://localhost:7007/api/
 @access_token = hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx
 
 ###
 
-GET {{ api_url }}/api/catalog/entities HTTP/1.1
+GET {{ api_url }}catalog/entities HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{ api_url }}catalog/entities/by-query?filter=kind=user HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{ api_url }}catalog/entities/by-query?&filter=kind%3Dtemplate HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+
+# Create a repo using a software template
+
+POST {{ api_url }}scaffolder/v2/tasks HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json; charset=utf-8
+
+{
+  "templateRef": "template:default/dotnet8-template",
+  "values": {
+    "name": "test-entity",
+    "description": "This is a test description",
+    "owner": "test-owner",
+    "repoUrl": "github.com?owner=0GiS0&repo=prueba-backstage-template",
+    "system": "system:default/tour-of-heroes"
+  }
+}
+
+
+###
+
+# Get the status of the task
+@task_id = 3716d6da-23cd-475c-9640-1584c383c4fc
+
+GET {{ api_url }}scaffolder/v2/tasks/{{task_id}} HTTP/1.1
 Authorization: Bearer {{access_token}}
