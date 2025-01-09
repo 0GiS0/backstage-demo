@@ -12,9 +12,7 @@ const BACKSTAGE_URL = process.env.BACKSTAGE_URL || 'http://app:7007/api';
 
 /*
 * Inference Description:
-This API retrieves Dragon Ball characters from an external API and returns the data in JSON format. 
-Input: a JSON object with an optional parameter: howManyCharacters. 
-Output: a JSON array with the details of the requested characters.
+It allows us to retrieve all components registered in Backstage.
 */
 
 /* JSON schema
@@ -66,11 +64,104 @@ app.post('/components', async (req, res) => {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx'
     }
-  }); 
+  });
 
   result = await result.json();
 
   res.json(result);
+
+});
+
+
+/* Inference Description: 
+  This endpoint allows us to create a new repository using Backstage.
+*/
+
+/* JSON schema
+{
+  "type": "object",
+  "properties": {
+    "templateRef": { "type": "string", "description": "Is the value of the property metadata.name of the component with type Template" },
+    "values": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "owner": { "type": "string" },
+        "repoUrl": { "type": "string" },
+        "system": { "type": "string" }
+      },
+      "required": ["name", "description", "owner", "repoUrl", "system"]
+    }
+  },
+  "required": ["templateRef", "values"]
+}
+*/
+
+app.post('/create_repo', async (req, res) => {
+
+  console.log('Request body: ', req.body);
+
+  const params = {
+    templateRef: req.body.templateRef,
+    values: {
+      name: req.body.values.name,
+      description: req.body.values.description,
+      owner: req.body.values.owner,
+      repoUrl: `github.com?owner=${req.body.values.owner}&repo=${req.body.values.name}`,
+      system: req.body.values.system
+    }
+  };
+
+  console.log('Parameters: ', params);
+
+
+  // The first call requests a new repository to be created
+  let result = await fetch(`${BACKSTAGE_URL}/scaffolder/v2/tasks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx'
+    },
+    body: JSON.stringify(params)
+  });
+
+  console.log(`Status code for the first call: ${result.status}`);
+  console.log(`Error for the first call: ${result.error}`);
+
+  result = await result.json(); // It returns the task ID
+
+  console.log('Task ID: ', result.id);
+
+  // Check the status of the task to know when it is completed
+  let status = 'completed';
+
+  while (status !== 'completed') {
+    let task = await fetch(`${BACKSTAGE_URL}/scaffolder/v2/tasks/${result.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx'
+      }
+    });
+
+    task = await task.json();
+
+    status = task.status;
+
+    console.log('Task status: ', status);
+
+    if (status === 'failed') {
+      console.log('Task failed');
+      break;
+    }
+
+  }
+
+  console.log('Task completed successfully');
+
+  res.json(result);
+
 });
 
 app.listen(PORT, () => {
