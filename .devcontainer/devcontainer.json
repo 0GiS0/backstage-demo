@@ -14,7 +14,7 @@
 			"nvmVersion": "latest"
 		},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		
+		"ghcr.io/jckimble/devcontainer-features/ngrok:3": {}
 	},
 	"forwardPorts": [
 		3000,
