@@ -103,7 +103,7 @@ app.post('/create_repo', async (req, res) => {
   console.log('Request body: ', req.body);
 
   const params = {
-    templateRef: req.body.templateRef,
+    templateRef: `template:default/${req.body.templateRef}`,
     values: {
       name: req.body.values.name,
       description: req.body.values.description,
