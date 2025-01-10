@@ -42,13 +42,17 @@ app.post('/components', async (req, res) => {
   console.log('Request body: ', req.body);
 
   const params = {
-    kind: req.body.kind || 'component',
+    kind: req.body.kind,
     name: req.body.name,
     owner: req.body.owner
   };
 
-  // Construir la URL con los parámetros disponibles
-  let query = `filter=kind=${params.kind}`;
+  // Build the query based on the parameters
+  let query = '';
+
+  if (params.kind) {
+    query += `&filter=kind=${params.kind}`;
+  }
   if (params.name) {
     query += `&filter=metadata.name=${params.name}`;
   }
@@ -62,11 +66,13 @@ app.post('/components', async (req, res) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx'
+      'Authorization': `Bearer ${process.env.BACKSTAGE_TOKEN}`
     }
   });
 
   result = await result.json();
+
+  console.log('Result: ', result);
 
   res.json(result);
 
@@ -121,7 +127,7 @@ app.post('/create_repo', async (req, res) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx'
+      'Authorization': `Bearer ${process.env.BACKSTAGE_TOKEN}`
     },
     body: JSON.stringify(params)
   });
@@ -141,7 +147,7 @@ app.post('/create_repo', async (req, res) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer hJH1SgtEaLHIMREu3W+xZqa1i/kqslzx'
+        'Authorization': `Bearer ${process.env.BACKSTAGE_TOKEN}`
       }
     });
 
@@ -155,7 +161,6 @@ app.post('/create_repo', async (req, res) => {
       console.log('Task failed');
       break;
     }
-
   }
 
   console.log('Task completed successfully');

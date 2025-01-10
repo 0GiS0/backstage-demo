@@ -25,7 +25,12 @@ Authorization: Bearer {{access_token}}
 GET {{ api_url }}catalog/entities/by-query?filter=metadata.name=heroes-java-api HTTP/1.1
 Authorization: Bearer {{access_token}}
 
+###
 
+# Search for a specific entity using the entity name
+
+GET {{ api_url }}catalog/entities/by-query?&filter=metadata.name=nodejs-backstage-template HTTP/1.1
+Authorization: Bearer {{access_token}}
 
 ###
 

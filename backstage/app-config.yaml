@@ -106,7 +106,7 @@ catalog:
             include:
               - "backstage-include"            
         schedule:
-          frequency: { minutes: 60 }     
+          frequency: { minutes: 15 }     
           timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
