@@ -53,10 +53,10 @@ Content-Type: application/json; charset=utf-8
 {
   "templateRef": "template:default/dotnet8-template",
   "values": {
-    "name": "test-entity",
-    "description": "This is a test description",
-    "owner": "test-owner",
-    "repoUrl": "github.com?owner=0GiS0&repo=prueba-backstage-template",
+    "name": "youtube-demo",
+    "description": "This is a demo for the youtube video",
+    "owner": "0GiS0",
+    "repoUrl": "github.com?owner=0GiS0&repo=youtube-demo",
     "system": "system:default/tour-of-heroes"
   }
 }
@@ -65,7 +65,7 @@ Content-Type: application/json; charset=utf-8
 ###
 
 # Get the status of the task
-@task_id = 3716d6da-23cd-475c-9640-1584c383c4fc
+@task_id = 84a02535-7ec3-4c99-b76a-5a7aa455779e
 
 GET {{ api_url }}scaffolder/v2/tasks/{{task_id}} HTTP/1.1
 Authorization: Bearer {{access_token}}
