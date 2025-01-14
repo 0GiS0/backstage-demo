@@ -54,6 +54,8 @@ yarn install
 yarn dev
 ```
 
+Si quiero comprobar que mi token y las llamadas a la API funcionan correctamente, tengo el archivo `backend-api.http`con algunas llamadas de ejemplo que puedo lanzar con la extensión de Visual Studio Code `REST Client`. Esto me permite incluso verificar las llamadas que hace GitHub Copilot con los parámetros que interpreta. Solo tienes que cambiar el valor de la variable `token`por el token que has creado en el paso anterior. O usar el mio que es un token de prueba de mi instancia local de Backstage.
+
 - `ghcp-extension-endpoints`: Este otro repositorio contiene los endpoints necesarios para que GitHub Copilot pueda interactuar con Backstage. Este proyecto, en su archivo `.env`debe almacenar el token que hemos creado en el paso anterior. Para poder ejecutar este proyecto bastan con lanzar estos dos comandos:
 
 ```bash
