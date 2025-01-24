@@ -12,12 +12,12 @@ There are the steps to deploy Backstage on Azure Container Apps.
 ### 0.Variables
 
 ```bash
-RESOURCE_GROUP=backstage-on-aca
+RESOURCE_GROUP=backstage-demo
 ACR_NAME=backstageimages
 LOCATION=northeurope
 AZURE_KEY_VAULT_NAME=backstage-key-vault
 DB_PASSWORD=@P0stgres$RANDOM
-DB_SERVER_NAME=backdb
+DB_SERVER_NAME=backstadeidpdb
 CONTAINERAPPS_ENVIRONMENT=backstage-environment
 AZURE_STORAGE_ACCOUNT=backstagestore
 AZURE_STORAGE_CONTAINER=docs
@@ -31,7 +31,7 @@ source .env
 
 az login --tenant $AZURE_TENANT_ID --allow-no-subscriptions --use-device-code
 
-CLIENT_ID=$(az ad app create --display-name $RESOURCE_GROUP --query appId -o tsv)
+CLIENT_ID=$(az ad app create --display-name $RESOURCE_GROUP --web-redirect-uris http://localhost:7007/api/auth/microsoft/handler/frame --query appId -o tsv)
 
 #Generate a secret for the app
 CLIENT_SECRET=$(az ad app credential reset --id $CLIENT_ID --query password -o tsv)
