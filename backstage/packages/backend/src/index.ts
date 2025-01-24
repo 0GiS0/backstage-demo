@@ -48,7 +48,7 @@ backend.add(
 
 // search plugin
 backend.add(import('@backstage/plugin-search-backend/alpha'));
-backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
+backend.add(import('@backstage/plugin-search-backend-module-catalog'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 
 // github integration
@@ -89,6 +89,6 @@ const scaffolderModuleCustomExtensions = createBackendModule({
 });
 
 
-backend.add(scaffolderModuleCustomExtensions());
+backend.add(scaffolderModuleCustomExtensions);
 
 backend.start();

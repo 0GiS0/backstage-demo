@@ -1,5 +1,10 @@
 # Deploy Backstage on Azure Container Apps
 
+Hi developer 👋🏻! This branch contains the code, and the configuration needed , to deploy Backstage in Azure Container Apps. This is part of my video [8. Cómo desplegar Backstage en Azure Container Apps](https://youtu.be/3YD-epHpOjk?si=peWmAXuP4jbQyzun), from [my playlist about Platform Engineering](https://youtube.com/playlist?list=PLO9JpmNAsqM6RttdyDmPyW0vR_zf20ETI&si=uZ3IWFPFOeCEXZez).
+
+[![8. Cómo desplegar Backstage en Azure Container Apps](docs/images/8.%20Desplegar%20Backstage%20en%20Azure%20Container%20Apps.png)](https://youtu.be/3YD-epHpOjk?si=nV-XOeBy3LdRu7Z7)
+
+
 There are the steps to deploy Backstage on Azure Container Apps.
 
 ## Prerequisites
@@ -24,7 +29,7 @@ AZURE_STORAGE_CONTAINER=docs
 IDENTITY_NAME=backstage-identity
 ```
 
-### 0.Register an application in Azure Active Directory
+### 0.Register an application in Microsoft Entra ID
 
 ```bash
 source .env

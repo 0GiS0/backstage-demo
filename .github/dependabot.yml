@@ -10,3 +10,16 @@ updates:
    directory: "/"
    schedule:
      interval: weekly
+   target-branch: "deploy-on-aca"
+
+ - package-ecosystem: "github-actions"
+   directory: "/"
+   schedule:
+     interval: weekly
+   target-branch: "deploy-on-aca"
+
+ - package-ecosystem: "npm"
+   directory: "backstage"
+   schedule:
+     interval: weekly
+   target-branch: "deploy-on-aca"
