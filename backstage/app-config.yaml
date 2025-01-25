@@ -115,7 +115,7 @@ catalog:
       returngisorg:
         organization: returngisorg
         # project: "*" # this will match all projects
-        project: "*"
+        project: ${AZURE_DEVOPS_PROJECT}
         # project: Backstage # this will match all projects
         # repository: '*' # this will match all repos
         path: /catalog-info.yaml
