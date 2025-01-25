@@ -1,8 +1,6 @@
 # Deploy Backstage on Azure Container Apps
 
-Hi developer 👋🏻! This branch contains the code, and the configuration needed , to deploy Backstage in Azure Container Apps. This is part of my video [8. Cómo desplegar Backstage en Azure Container Apps](https://youtu.be/3YD-epHpOjk?si=peWmAXuP4jbQyzun), from [my playlist about Platform Engineering](https://youtube.com/playlist?list=PLO9JpmNAsqM6RttdyDmPyW0vR_zf20ETI&si=uZ3IWFPFOeCEXZez).
-
-[![8. Cómo desplegar Backstage en Azure Container Apps](docs/images/8.%20Desplegar%20Backstage%20en%20Azure%20Container%20Apps.png)](https://youtu.be/3YD-epHpOjk?si=nV-XOeBy3LdRu7Z7)
+Hi developer 👋🏻! This branch combines GitHub repositories and Azure DevOps repos using Microsoft Entra ID as an identity provider. Also OpenTelemetry is enabled to get the metric from Prometheus that it also part of this Dev Container.
 
 
 There are the steps to deploy Backstage on Azure Container Apps.
@@ -36,10 +34,10 @@ source .env
 
 az login --tenant $AZURE_TENANT_ID --allow-no-subscriptions --use-device-code
 
-CLIENT_ID=$(az ad app create --display-name $RESOURCE_GROUP --web-redirect-uris http://localhost:7007/api/auth/microsoft/handler/frame --query appId -o tsv)
+MICROSOFT_ENTRAID_CLIENT_ID=$(az ad app create --display-name $RESOURCE_GROUP --web-redirect-uris http://localhost:7007/api/auth/microsoft/handler/frame --query appId -o tsv)
 
 #Generate a secret for the app
-CLIENT_SECRET=$(az ad app credential reset --id $CLIENT_ID --query password -o tsv)
+MICROSOFT_ENTRAID_CLIENT_SECRET=$(az ad app credential reset --id $MICROSOFT_ENTRAID_CLIENT_ID --query password -o tsv)
 
 # Add the following API Permissions:
 # Microsoft Graph:
@@ -137,7 +135,8 @@ LAST_IMAGE_TAG=$(az acr repository show-tags --name $ACR_NAME --repository backs
 az keyvault create \
 --name $AZURE_KEY_VAULT_NAME \
 --resource-group $RESOURCE_GROUP \
---location $LOCATION
+--location $LOCATION \
+ --enable-rbac-authorization false
 
 BACKEND_SECRET_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
@@ -174,13 +173,13 @@ TECHDOCS_AZURE_ACCOUNT_KEY_URI=$(az keyvault secret set \
 AZURE_CLIENT_ID_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name AZURE-CLIENT-ID \
---value $CLIENT_ID \
+--value $MICROSOFT_ENTRAID_CLIENT_ID \
 --query id -o tsv)
 
 AZURE_CLIENT_SECRET_URI=$(az keyvault secret set \
 --vault-name $AZURE_KEY_VAULT_NAME \
 --name AZURE-CLIENT-SECRET \
---value $CLIENT_SECRET \
+--value $MICROSOFT_ENTRAID_CLIENT_SECRET \
 --query id -o tsv)
 
 AZURE_TENANT_ID_URI=$(az keyvault secret set \
@@ -320,5 +319,5 @@ Update App Registration with the following redirect URI:
 
 ```bash
 az login --tenant $AZURE_TENANT_ID --allow-no-subscriptions --use-device-code
-az ad app update --id ${CLIENT_ID} --web-redirect-uris "https://${CONTAINER_APP_URL}/api/auth/microsoft/handler/frame"
+az ad app update --id ${MICROSOFT_ENTRAID_CLIENT_ID} --web-redirect-uris "https://${CONTAINER_APP_URL}/api/auth/microsoft/handler/frame" "http://localhost:7007/api/auth/microsoft/handler/frame"
 ```

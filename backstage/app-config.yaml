@@ -43,6 +43,10 @@ integrations:
   azure:
     - host: dev.azure.com
       token: ${AZURE_PERSONAL_ACCESS_TOKEN}
+  github:
+    - host: github.com
+      apps:
+        - $include: dragonstone-app-credentials.yaml
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -119,6 +123,16 @@ catalog:
           frequency: { minutes: 1 }
           # supports ISO duration, "human duration" as used in code
           timeout: { minutes: 3 }
+
+    github:
+      dragonstoneOrg:
+        organization: dragonstone-org
+        catalogPath: "/catalog-info.yaml"
+        filters:
+          branch: main
+        schedule:
+          frequency: { minutes: 1 }
+          timeout: { minutes: 3 }    
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
