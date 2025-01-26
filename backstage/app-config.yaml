@@ -75,17 +75,19 @@ techdocs:
 auth:
   environment: development
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers:
-    # See https://backstage.io/docs/auth/guest/provider
+  providers:    
     microsoft:
       development:
         clientId: ${AZURE_CLIENT_ID}
         clientSecret: ${AZURE_CLIENT_SECRET}
         tenantId: ${AZURE_TENANT_ID}
         domainHint: ${AZURE_TENANT_ID}
+        # additionalScopes: ["https://devcenter.azure.com/.default"]
         signIn:
           resolvers:
             - resolver: emailMatchingUserEntityProfileEmail
+        
+
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
   defaultAuthor:

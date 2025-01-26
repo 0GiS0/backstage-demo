@@ -45,6 +45,7 @@ import {
 import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
 import { TwoColumnLayout } from './scaffolder/custom-layouts/TwoColum';
+import { AzureDevcenterPage } from '@internal/backstage-plugin-azure-devcenter';
 
 // const githubProvider: SignInProviderConfig = {
 //   id: 'github-auth-provider',
@@ -124,6 +125,7 @@ const routes = (
     </Route>
 
     <Route path="/api-docs" element={<ApiExplorerPage />} />
+
     <Route
       path="/tech-radar"
       element={<TechRadarPage width={1500} height={800} />}
@@ -141,6 +143,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/azure-devcenter" element={<AzureDevcenterPage />} />
   </FlatRoutes>
 );
 
