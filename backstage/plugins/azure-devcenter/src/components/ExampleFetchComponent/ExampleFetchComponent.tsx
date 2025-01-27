@@ -8,6 +8,11 @@ import {
 } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 
+const { InteractiveBrowserCredential } = require("@azure/identity");
+const { isUnexpected } = require("@azure-rest/developer-devcenter");
+const createClient = require("@azure-rest/developer-devcenter").default;
+// require("dotenv").config();
+
 export const exampleUsers = {
   results: [
     {
@@ -241,50 +246,45 @@ const useStyles = makeStyles({
   },
 });
 
-type User = {
-  gender: string; // "male"
-  name: {
-    title: string; // "Mr",
-    first: string; // "Duane",
-    last: string; // "Reed"
-  };
-  email: string; // "duane.reed@example.com"
-  picture: string; // "https://api.dicebear.com/6.x/open-peeps/svg?seed=Duane"
-  nat: string; // "AU"
+type DevBox = {
+  name: string; // "male"
+  projectName: string; // "duane.reed@example.com"
+  poolName: string; // "https://api.dicebear.com/6.x/open-peeps/svg?seed=Duane"
+  user: string; // "AU"
 };
 
 type DenseTableProps = {
-  users: User[];
+  devboxes: DevBox[];
 };
 
-export const DenseTable = ({ users }: DenseTableProps) => {
-  const classes = useStyles();
+export const DenseTable = ({ devboxes }: DenseTableProps) => {
+  // const classes = useStyles();
 
   const columns: TableColumn[] = [
-    { title: 'Avatar', field: 'avatar' },
+    // { title: 'Avatar', field: 'avatar' },
     { title: 'Name', field: 'name' },
-    { title: 'Email', field: 'email' },
-    { title: 'Nationality', field: 'nationality' },
+    { title: 'Project Name', field: 'projectName' },
+    { title: 'Pool Name', field: 'poolName' },
   ];
 
-  const data = users.map(user => {
+  const data = devboxes.map(devbox => {
     return {
-      avatar: (
-        <img
-          src={user.picture}
-          className={classes.avatar}
-          alt={user.name.first}
-        />
-      ),
-      name: `${user.name.first} ${user.name.last}`,
-      email: user.email,
-      nationality: user.nat,
+      // avatar: (
+      //   <img
+      //     src={user.picture}
+      //     className={classes.avatar}
+      //     alt={user.name.first}
+      //   />
+      // ),
+      name: `${devbox.name}`,
+      projectName: devbox.projectName,
+      poolName: devbox.poolName,
     };
   });
 
   return (
     <Table
-      title="Example User List"
+      title="DevBoxes List"
       options={{ search: false, paging: false }}
       columns={columns}
       data={data}
@@ -294,9 +294,31 @@ export const DenseTable = ({ users }: DenseTableProps) => {
 
 export const ExampleFetchComponent = () => {
 
-  const { value, loading, error } = useAsync(async (): Promise<User[]> => {
+  const { value, loading, error } = useAsync(async (): Promise<DevBox[]> => {
     // Would use fetch in a real world example
-    return exampleUsers.results;
+    // return exampleUsers.results;
+
+    const endpoint = process.env.DEVCENTER_ENDPOINT || "https://4d1ab161-96c4-4ee9-8c6e-ec1718f0c3c9-nestle-devcenter.northeurope.devcenter.azure.com";
+
+    console.log("Endpoint: ", endpoint);
+
+    const client = createClient(endpoint, new InteractiveBrowserCredential({
+      tenantId: "4d1ab161-96c4-4ee9-8c6e-ec1718f0c3c9",
+      clientId: "ffc5d161-da51-454a-b3ad-8c61ff11f254",
+      redirectUri: "http://localhost:7007/api/auth/microsoft/handler/frame?env=development",
+    }));
+
+    
+
+    const devBoxList = await client.path("/devboxes").get();
+    if (isUnexpected(devBoxList)) {
+      throw new Error(devBoxList.body.error);
+    }
+
+    console.log("DevBoxes: ", devBoxList.body.value);
+
+    return devBoxList.body.value;
+
   }, []);
 
   if (loading) {
@@ -305,5 +327,5 @@ export const ExampleFetchComponent = () => {
     return <ResponseErrorPanel error={error} />;
   }
 
-  return <DenseTable users={value || []} />;
+  return <DenseTable devboxes={value || []} />;
 };

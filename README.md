@@ -60,6 +60,19 @@ az ad app permission add --id $MICROSOFT_ENTRAID_CLIENT_ID --api 00000003-0000-0
 az ad app permission add --id $MICROSOFT_ENTRAID_CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions df021288-bdef-4463-88db-98f22de89214=Role # User.Read.All
 az ad app permission add --id $MICROSOFT_ENTRAID_CLIENT_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions 98830695-27a2-44f7-8c18-0c3ebc9698f6=Role # GroupMember.Read.All
 
+
+az ad app permission list --id $MICROSOFT_ENTRAID_CLIENT_ID
+
+
+az ad sp list --query "[?appDisplayName=='Dev Center']" --all
+
+
+az ad app permission add --id ffc5d161-da51-454a-b3ad-8c61ff11f254 --api 00000003-0000-0000-c000-000000000000 --api-permissions 797f4846-ba00-4fd7-ba43-dac1f8f63013=Role # Directory.Read.All
+az ad app permission add --id ffc5d161-da51-454a-b3ad-8c61ff11f254 --api 00000003-0000-0000-c000-000000000000 --api-permissions 797f4846-ba00-4fd7-ba43-dac1f8f63013=Scope # Directory.Read.All
+
+az ad app permission add --id ffc5d161-da51-454a-b3ad-8c61ff11f254 --api 00000003-0000-0000-c000-000000000000 --api-permissions e526e72f-ffae-44a0-8dac-cf14b8bd40e2=Role # Group.Read.All
+az ad app permission add --id ffc5d161-da51-454a-b3ad-8c61ff11f254 --api 00000003-0000-0000-c000-000000000000 --api-permissions e526e72f-ffae-44a0-8dac-cf14b8bd40e2=Scope # Group.Read.All
+
 # Wait for the permissions to be granted
 sleep 30
 

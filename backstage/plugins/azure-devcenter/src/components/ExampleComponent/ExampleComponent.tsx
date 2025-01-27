@@ -13,12 +13,12 @@ import { ExampleFetchComponent } from '../ExampleFetchComponent';
 
 export const ExampleComponent = () => (
   <Page themeId="tool">
-    <Header title="Welcome to azure-devcenter!" subtitle="Optional subtitle">
-      <HeaderLabel label="Owner" value="Team X" />
+    <Header title="Welcome to Azure Dev Center!" subtitle="Your self-service remote development workstations">
+      <HeaderLabel label="Owner" value="return(GiS);" />
       <HeaderLabel label="Lifecycle" value="Alpha" />
     </Header>
     <Content>
-      <ContentHeader title="Plugin title">
+      <ContentHeader title="Azure Dev Center">
         <SupportButton>A description of your plugin goes here.</SupportButton>
       </ContentHeader>
       <Grid container spacing={3} direction="column">
