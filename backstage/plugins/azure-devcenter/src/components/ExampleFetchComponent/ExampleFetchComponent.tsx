@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import {
   Table,
   TableColumn,
@@ -238,13 +238,13 @@ export const exampleUsers = {
   ],
 };
 
-const useStyles = makeStyles({
-  avatar: {
-    height: 32,
-    width: 32,
-    borderRadius: '50%',
-  },
-});
+// const useStyles = makeStyles({
+//   avatar: {
+//     height: 32,
+//     width: 32,
+//     borderRadius: '50%',
+//   },
+// });
 
 type DevBox = {
   name: string; // "male"

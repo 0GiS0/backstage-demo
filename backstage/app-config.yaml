@@ -1,11 +1,11 @@
 app:
-  title: Scaffolded Backstage App
+  title: Backstage for ${ORGANIZATION_NAME}
   baseUrl: "http://localhost:3000"
   listen:
     host: 0.0.0.0
 
 organization:
-  name: My Company
+  name: ${ORGANIZATION_NAME}
 
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins

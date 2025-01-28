@@ -231,7 +231,15 @@ AZURE_DEVOPS_PROJECT_URI=$(az keyvault secret set \
 --name AZURE-DEVOPS-PROJECT \
 --value $AZURE_DEVOPS_PROJECT \
 --query id -o tsv)
+
+ORGANIZATION_NAME_URI=$(az keyvault secret set \
+--vault-name $AZURE_KEY_VAULT_NAME \
+--name ORGANIZATION-NAME \
+--value "$ORGANIZATION_NAME" \
+--query id -o tsv)
 ```
+
+
 
 You can check all URI values:
 
@@ -243,12 +251,13 @@ $TECHDOCS_AZURE_ACCOUNT_NAME_URI
 $TECHDOCS_AZURE_ACCOUNT_KEY_URI
 $AZURE_CLIENT_ID_URI
 $AZURE_CLIENT_SECRET_URI
-$AZURE_TENANT_ID
+$AZURE_TENANT_ID_URI
 $POSTGRES_HOST_URI
 $POSTGRES_PORT_URI
 $POSTGRESS_USER_URI
 $POSTGRES_PASSWORD_URI
 $AZURE_DEVOPS_PROJECT_URI
+$ORGANIZATION_NAME_URI
 ```
 
 Check value of the secrets:
@@ -267,6 +276,7 @@ az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-PORT 
 az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-USER --query value -o tsv
 az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name POSTGRES-PASSWORD --query value -o tsv
 az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name AZURE-DEVOPS-PROJECT --query value -o tsv
+az keyvault secret show --vault-name $AZURE_KEY_VAULT_NAME --name ORGANIZATION-NAME --query value -o tsv
 ```
 
 ### 9.Deploy the image to Azure Container Apps
@@ -309,8 +319,8 @@ az containerapp create \
 --resource-group $RESOURCE_GROUP \
 --min-replicas 1 \
 --image "$ACR_NAME.azurecr.io/backstage:$LAST_IMAGE_TAG" \
---secrets "backend-secret=keyvaultref:$BACKEND_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-personal-access-token=keyvaultref:$AZURE_PERSONAL_ACCESS_TOKEN_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-container-name=keyvaultref:$TECHDOCS_AZURE_CONTAINER_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-name=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-key=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_KEY_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-id=keyvaultref:$AZURE_CLIENT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-secret=keyvaultref:$AZURE_CLIENT_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-tenant-id=keyvaultref:$AZURE_TENANT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-host=keyvaultref:$POSTGRES_HOST_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-port=keyvaultref:$POSTGRES_PORT_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-user=keyvaultref:$POSTGRES_USER_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-password=keyvaultref:$POSTGRES_PASSWORD_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-devops-project=keyvaultref:$AZURE_DEVOPS_PROJECT_URI,identityref:$BACKSTAGE_IDENTITY_ID" \
---env-vars "BACKEND_SECRET=secretref:backend-secret" "AZURE_PERSONAL_ACCESS_TOKEN=secretref:azure-personal-access-token" "TECHDOCS_AZURE_CONTAINER_NAME=secretref:techdocs-azure-container-name" "TECHDOCS_AZURE_ACCOUNT_NAME=secretref:techdocs-azure-account-name" "TECHDOCS_AZURE_ACCOUNT_KEY=secretref:techdocs-azure-account-key" "AZURE_CLIENT_ID=secretref:azure-client-id" "AZURE_CLIENT_SECRET=secretref:azure-client-secret" "AZURE_TENANT_ID=secretref:azure-tenant-id" "POSTGRES_HOST=secretref:postgres-host" "POSTGRES_PORT=secretref:postgres-port" "POSTGRES_USER=secretref:postgres-user" "POSTGRES_PASSWORD=secretref:postgres-password" "AZURE_DEVOPS_PROJECT=secretref:azure-devops-project" \
+--secrets "backend-secret=keyvaultref:$BACKEND_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-personal-access-token=keyvaultref:$AZURE_PERSONAL_ACCESS_TOKEN_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-container-name=keyvaultref:$TECHDOCS_AZURE_CONTAINER_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-name=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" "techdocs-azure-account-key=keyvaultref:$TECHDOCS_AZURE_ACCOUNT_KEY_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-id=keyvaultref:$AZURE_CLIENT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-client-secret=keyvaultref:$AZURE_CLIENT_SECRET_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-tenant-id=keyvaultref:$AZURE_TENANT_ID_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-host=keyvaultref:$POSTGRES_HOST_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-port=keyvaultref:$POSTGRES_PORT_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-user=keyvaultref:$POSTGRES_USER_URI,identityref:$BACKSTAGE_IDENTITY_ID" "postgres-password=keyvaultref:$POSTGRES_PASSWORD_URI,identityref:$BACKSTAGE_IDENTITY_ID" "azure-devops-project=keyvaultref:$AZURE_DEVOPS_PROJECT_URI,identityref:$BACKSTAGE_IDENTITY_ID" "organization-name=keyvaultref:$ORGANIZATION_NAME_URI,identityref:$BACKSTAGE_IDENTITY_ID" \
+--env-vars "BACKEND_SECRET=secretref:backend-secret" "AZURE_PERSONAL_ACCESS_TOKEN=secretref:azure-personal-access-token" "TECHDOCS_AZURE_CONTAINER_NAME=secretref:techdocs-azure-container-name" "TECHDOCS_AZURE_ACCOUNT_NAME=secretref:techdocs-azure-account-name" "TECHDOCS_AZURE_ACCOUNT_KEY=secretref:techdocs-azure-account-key" "AZURE_CLIENT_ID=secretref:azure-client-id" "AZURE_CLIENT_SECRET=secretref:azure-client-secret" "AZURE_TENANT_ID=secretref:azure-tenant-id" "POSTGRES_HOST=secretref:postgres-host" "POSTGRES_PORT=secretref:postgres-port" "POSTGRES_USER=secretref:postgres-user" "POSTGRES_PASSWORD=secretref:postgres-password" "AZURE_DEVOPS_PROJECT=secretref:azure-devops-project" "ORGANIZATION_NAME=secretref:organization-name" \
 --user-assigned $BACKSTAGE_IDENTITY_ID \
 --ingress external \
 --target-port 7007 \

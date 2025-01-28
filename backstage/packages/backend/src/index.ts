@@ -54,6 +54,9 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 // github integration
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 
+// azure-devops integration
+backend.add(import('@backstage/plugin-scaffolder-backend-module-azure'));
+
 // github discovery
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
 backend.add(import('@backstage/plugin-catalog-backend-module-azure/alpha'));
