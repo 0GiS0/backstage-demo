@@ -32,6 +32,8 @@ backend.add(import('@backstage/plugin-auth-backend'));
 // For Microsoft login
 backend.add(import('@backstage/plugin-auth-backend-module-microsoft-provider'));
 
+// For Github login
+backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
 
 // catalog plugin
