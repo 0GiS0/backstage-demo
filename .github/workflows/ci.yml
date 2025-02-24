@@ -6,14 +6,12 @@ on:
       - microsoft-and-gh
 
 jobs:
-  build:   
-    defaults:
-      runs-on: ubuntu-latest
-      working-directory: backstage
+  build:       
+    runs-on: ubuntu-latest     
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
@@ -22,9 +20,12 @@ jobs:
 
     - name: Install dependencies
       run: yarn install
+      working-directory: backstage      
 
     - name: Build project
       run: yarn run build:all
+      working-directory: backstage
 
     - name: Run tests
       run: yarn run test:all
+      working-directory: backstage
