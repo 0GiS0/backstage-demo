@@ -42,7 +42,7 @@ backend:
 integrations:
   azure:
     - host: dev.azure.com
-      token: ${AZURE_PERSONAL_ACCESS_TOKEN}
+      token: ${ADO_PAT}
   github:
     - host: github.com
       apps:
@@ -78,7 +78,7 @@ auth:
   providers:    
     microsoft:
       development:
-        clientId: ${AZURE_CLIENT_ID}
+        clientId: ${MICROSOFT_ENTRAID_CLIENT_ID}
         clientSecret: ${AZURE_CLIENT_SECRET}
         tenantId: ${AZURE_TENANT_ID}
         domainHint: ${AZURE_TENANT_ID}
@@ -101,8 +101,8 @@ catalog:
   providers:
     microsoftGraphOrg:
       authority: https://login.microsoftonline.com/${AZURE_TENANT_ID}
-      clientId: ${AZURE_CLIENT_ID}
-      clientSecret: ${AZURE_CLIENT_SECRET}
+      clientId: ${MICROSOFT_ENTRAID_CLIENT_ID}
+      clientSecret: ${MICROSOFT_ENTRAID_CLIENT_SECRET}
       tenantId: ${AZURE_TENANT_ID}
       tokenAudience: https://graph.microsoft.com
       user:
