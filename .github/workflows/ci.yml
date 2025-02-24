@@ -23,9 +23,9 @@ jobs:
       working-directory: backstage      
 
     - name: Build project
-      run: yarn run build:all
+      run: yarn build:all
       working-directory: backstage
 
     - name: Run tests
-      run: yarn run test:all
+      run: yarn test:all
       working-directory: backstage
