@@ -40,7 +40,7 @@ export const validateKebabCaseValidation = (
     value: string,
     validation: FieldValidation,
 ) => {
-    const kebabCase = /^[a-z0-9-_]+$/g.test(value);
+    const kebabCase = /^[a-zA-Z0-9-_]+$/g.test(value);
 
     if (kebabCase === false) {
         validation.addError(
