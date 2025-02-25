@@ -96,4 +96,7 @@ const scaffolderModuleCustomExtensions = createBackendModule({
 
 backend.add(scaffolderModuleCustomExtensions);
 
+// azure pipelines actions
+backend.add(import('@parfuemerie-douglas/scaffolder-backend-module-azure-pipelines'))
+
 backend.start();
