@@ -1,5 +1,5 @@
 app:
-  title: ${APP_TITLE}
+  title: Backstage for ${ORGANIZATION_NAME}
   # Should be the same as backend.baseUrl when using the `app-backend` plugin.
   baseUrl: "https://backstage.${CONTAINER_APP_ENV_DNS_SUFFIX}"
 
@@ -42,8 +42,8 @@ auth:
     # See https://backstage.io/docs/auth/guest/provider
     microsoft:
       production:
-        clientId: ${AZURE_CLIENT_ID}
-        clientSecret: ${AZURE_CLIENT_SECRET}
+        clientId: ${MICROSOFT_ENTRAID_CLIENT_ID}
+        clientSecret: ${MICROSOFT_ENTRAID_CLIENT_SECRET}
         tenantId: ${AZURE_TENANT_ID}
         domainHint: ${AZURE_TENANT_ID}
         callbackUrl: https://backstage.${CONTAINER_APP_ENV_DNS_SUFFIX}/api/auth/microsoft/handler/frame

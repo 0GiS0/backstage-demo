@@ -79,7 +79,7 @@ auth:
     microsoft:
       development:
         clientId: ${MICROSOFT_ENTRAID_CLIENT_ID}
-        clientSecret: ${AZURE_CLIENT_SECRET}
+        clientSecret: ${MICROSOFT_ENTRAID_CLIENT_SECRET}
         tenantId: ${AZURE_TENANT_ID}
         domainHint: ${AZURE_TENANT_ID}
         # additionalScopes: ["https://devcenter.azure.com/.default"]
